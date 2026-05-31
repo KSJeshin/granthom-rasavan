@@ -1,0 +1,62 @@
+rank,key,effort_score,hand,row,finger,key_type,role
+1,f,1.0,L,home,index,character,normal: base consonant / vowel matra
+2,j,1.0,R,home,index,character,normal: base consonant / vowel matra
+3,space,1.0,—,func,thumb,modifier,word separator
+4,d,1.1,L,home,middle,character,normal: base consonant / vowel matra
+5,k,1.1,R,home,middle,character,normal: base consonant / vowel matra
+6,s,1.3,L,home,ring,character,normal: base consonant / vowel matra
+7,l,1.3,R,home,ring,character,normal: base consonant / vowel matra
+8,a,1.6,L,home,pinky,character,normal: base consonant / vowel matra
+9,;,1.6,R,home,pinky,character,normal: base consonant / vowel matra
+10,c,1.8,L,bot,middle,character,normal: base consonant / vowel matra
+11,m,1.8,R,bot,index,character,normal: base consonant / vowel matra
+12,i,2.0,R,top,ring,character,normal: base consonant / vowel matra
+13,e,2.1,L,top,middle,character,normal: base consonant / vowel matra
+14,v,2.2,L,bot,index,character,normal: base consonant / vowel matra
+15,u,2.2,R,top,middle,character,normal: base consonant / vowel matra
+16,n,2.2,R,bot,index,character,normal: base consonant / vowel matra
+17,r,2.3,L,top,index,character,normal: base consonant / vowel matra
+18,x,2.4,L,bot,ring,character,normal: base consonant / vowel matra
+19,o,2.4,R,top,ring,character,normal: base consonant / vowel matra
+20,",",2.4,R,bot,middle,character,normal: base consonant / vowel matra
+21,w,2.5,L,top,ring,character,normal: base consonant / vowel matra
+22,t,2.6,L,top,index,character,index stretch
+23,z,2.7,L,bot,pinky,character,normal: base consonant / vowel matra
+24,.,2.7,R,bot,ring,character,normal: base consonant / vowel matra
+25,/,3.3,R,bot,ring,character,normal: base consonant / vowel matra
+26,4,2.9,L,num,index,character,normal: base consonant / vowel matra
+27,5,2.9,L,num,index,character,normal: base consonant / vowel matra
+28,g,2.9,L,home,index,character,index inward stretch
+29,h,2.9,R,home,index,character,index inward stretch
+30,7,2.9,R,num,index,character,normal: base consonant / vowel matra
+31,8,2.9,R,num,middle,character,normal: base consonant / vowel matra
+32,q,3.0,L,top,pinky,character,normal: base consonant / vowel matra
+33,9,3.0,R,num,ring,character,normal: base consonant / vowel matra
+34,p,3.0,R,top,pinky,character,normal: base consonant / vowel matra
+35,lshift,3.3,L,bot,pinky,modifier,layer 2: virama-attached consonant / independent vowel
+36,rshift,4.6,R,bot,pinky,modifier,layer 2: virama-attached consonant / independent vowel
+37,3,3.4,L,num,middle,character,normal: base consonant / vowel matra
+38,caps_lock,3.4,L,home,pinky,modifier,reassigned: English QWERTY toggle
+39,',3.4,R,home,pinky,character,pinky outward stretch
+40,y,3.4,R,top,index,character,index stretch
+41,lalt,3.5,L,func,thumb,modifier,standard alt
+42,6,3.5,R,num,index,character,normal: base consonant / vowel matra
+43,0,3.5,R,num,pinky,character,normal: base consonant / vowel matra
+44,ralt_altgr,3.5,R,func,thumb,modifier,layer 3: chillu / Malayalam digit / specialist
+45,[,3.6,R,top,pinky,character,normal: base consonant / vowel matra
+46,b,3.7,L,bot,index,character,index inward curl
+47,win_cmd,3.8,L,func,thumb,modifier,OS key
+48,menu,3.8,R,func,thumb,modifier,context menu
+49,2,4.0,L,num,ring,character,normal: base consonant / vowel matra
+50,lctrl,4.0,L,func,pinky,modifier,standard ctrl
+51,rctrl,4.0,R,func,pinky,modifier,standard ctrl
+52,tab,4.2,L,top,pinky,modifier,standard tab
+53,-,4.2,R,num,pinky,character,normal: base consonant / vowel matra
+55,scroll_lock,4.5,R,func,pinky,modifier,candidate: Malayalam numeral mode toggle
+56,1,4.6,L,num,pinky,character,normal: base consonant / vowel matra
+57,],4.7,R,top,pinky,character,pinky far
+58,enter,4.8,R,home,pinky,modifier,standard enter
+59,=,5.1,R,num,pinky,character,normal: base consonant / vowel matra
+60,`,5.5,L,num,pinky,character,normal: base consonant / vowel matra
+61,\,5.6,R,top,pinky,character,pinky far
+62,backspace,5.8,R,num,pinky,modifier,far pinky reach
