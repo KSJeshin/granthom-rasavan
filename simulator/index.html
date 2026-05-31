@@ -1,47 +1,1849 @@
 <!DOCTYPE html>
 <html lang="ml">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ഗ്രന്ഥം രസവാൻ — Simulator</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 700px;
-      margin: 60px auto;
-      padding: 0 24px;
-      text-align: center;
-      color: #1a1917;
-      background: #f8f7f4;
-    }
-    h1 { font-size: 28px; margin-bottom: 8px; }
-    .sub { color: #6b6966; margin-bottom: 40px; }
-    .notice {
-      background: #fff;
-      border: 1px solid #e8e6e0;
-      border-radius: 10px;
-      padding: 28px;
-      margin-bottom: 32px;
-      text-align: left;
-    }
-    a { color: #2d5a3d; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ഗ്രന്ഥം രസവാൻ — Keyboard Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@300;400;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── DESIGN TOKENS ────────────────────────────────────── */
+:root {
+  --bg:       #f5f3ef;
+  --surface:  #ffffff;
+  --surface2: #f0ede8;
+  --border:   #e2ddd6;
+  --border2:  #ccc6bc;
+
+  --text:     #1c1a17;
+  --text2:    #6b6560;
+  --text3:    #9e9890;
+
+  --accent:   #c0392b;        /* deep red — ink/script tone */
+  --accent-s: #f5e8e6;
+  --gold:     #a0722a;
+  --gold-s:   #fdf3dc;
+
+  /* layer colours — warm, readable */
+  --l-normal:  #eaf3ea;  --l-normal-t:  #1a5c2a;
+  --l-shift:   #e8f0fb;  --l-shift-t:   #1a4070;
+  --l-symbl:   #fdf3dc;  --l-symbl-t:   #7a4a00;
+  --l-ss:      #fde8e8;  --l-ss-t:      #6a2020;
+
+  /* key surfaces */
+  --key-bg:    #f9f7f4;
+  --key-bdr:   #ddd8d0;
+  --mod-bg:    #f0ede8;
+  --mod-bdr:   #ccc6bc;
+
+  --radius:    6px;
+  --radius-lg: 10px;
+  --shadow:    0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.1);
+
+  --ml: 'Noto Sans Malayalam', sans-serif;
+  --ui: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+
+/* ── RESET ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--ui);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── SCROLLBAR ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* ── HEADER ───────────────────────────────────────────── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 18px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.brand-ml {
+  font-family: var(--ml);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: .01em;
+  line-height: 1;
+}
+.brand-en {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text3);
+  letter-spacing: .04em;
+}
+.brand-sep {
+  width: 1px;
+  height: 22px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.header-tag {
+  font-size: 11px;
+  color: var(--text2);
+  font-style: italic;
+  flex-shrink: 0;
+}
+.version-badge {
+  font-size: 9px;
+  font-family: var(--mono);
+  background: var(--gold-s);
+  color: var(--gold);
+  border: 1px solid #e8d8a8;
+  border-radius: 3px;
+  padding: 1px 6px;
+  flex-shrink: 0;
+}
+.header-hint {
+  font-size: 10px;
+  color: var(--text3);
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.hbtns {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ── LEGEND BAR ───────────────────────────────────────── */
+.legend {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 18px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+}
+.li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text2);
+}
+.ld {
+  width: 22px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.legend-hint {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text3);
+  font-style: italic;
+}
+
+/* ── MAIN LAYOUT ──────────────────────────────────────── */
+.main {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── LEFT PANEL ───────────────────────────────────────── */
+.lpanel {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.ptabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  padding: 0 4px;
+  gap: 2px;
+}
+.ptab {
+  flex: 1;
+  padding: 9px 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  color: var(--text2);
+  border: none;
+  background: none;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  letter-spacing: .02em;
+}
+.ptab:hover { color: var(--text); }
+.ptab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.pcontent { flex: 1; overflow-y: auto; padding: 12px; display: none; }
+.pcontent.show { display: block; }
+
+/* palette sections */
+.piece-section { margin-bottom: 14px; }
+.piece-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.piece-grid { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* palette modifier key */
+.pk-mod {
+  padding: 5px 10px;
+  height: 32px;
+  background: var(--mod-bg);
+  border: 1px solid var(--mod-bdr);
+  border-radius: var(--radius);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text2);
+  transition: box-shadow .15s, border-color .15s;
+  white-space: nowrap;
+  user-select: none;
+}
+.pk-mod:hover { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-s); }
+.pk-mod:active { cursor: grabbing; }
+
+/* palette character key */
+.pk-char {
+  font-family: var(--ml);
+  font-size: 10px;
+  width: 44px;
+  height: 44px;
+  background: var(--key-bg);
+  border: 1px solid var(--key-bdr);
+  border-radius: var(--radius);
+  cursor: grab;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: box-shadow .15s, border-color .15s;
+  box-shadow: var(--shadow);
+}
+.pk-char:hover { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-s), var(--shadow); }
+.pk-char:active { cursor: grabbing; }
+.pk-q {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  line-height: 1;
+}
+.pk-q.tl { background: var(--l-ss); color: var(--l-ss-t); }
+.pk-q.tr { background: var(--l-shift); color: var(--l-shift-t); }
+.pk-q.bl { background: var(--l-symbl); color: var(--l-symbl-t); }
+.pk-q.br { background: var(--l-normal); color: var(--l-normal-t); }
+
+/* palette space key */
+.pk-space {
+  width: 90px;
+  height: 32px;
+  background: var(--key-bg);
+  border: 1px solid var(--key-bdr);
+  border-radius: var(--radius);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text2);
+  transition: box-shadow .15s, border-color .15s;
+}
+.pk-space:hover { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-s); }
+
+/* character panel */
+.cgroup { margin-bottom: 12px; }
+.cglabel {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 5px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+}
+.cgrid { display: flex; flex-wrap: wrap; gap: 3px; }
+.ctile {
+  font-family: var(--ml);
+  font-size: 16px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--key-bg);
+  border: 1px solid var(--key-bdr);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .15s;
+  user-select: none;
+  flex-shrink: 0;
+}
+.ctile:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: scale(1.08); }
+.ctile.copied { background: #2d8a50; border-color: #2d8a50; color: #fff; }
+.ctile-sm { font-size: 9px; width: auto; padding: 0 5px; }
+
+/* controls tab */
+.ctrl-section { margin-bottom: 14px; }
+.ctrl-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 6px;
+}
+.ctrl-btn {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-family: var(--ui);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  text-align: left;
+  transition: all .15s;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ctrl-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-s); }
+.ctrl-btn.mod-on { background: var(--accent-s); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.ctrl-btn.caps-on { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; font-weight: 600; }
+.ctrl-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--border2); flex-shrink: 0;
+  transition: background .15s;
+}
+.ctrl-btn.mod-on .ctrl-dot { background: var(--accent); }
+.ctrl-btn.caps-on .ctrl-dot { background: #4caf50; }
+.ctrl-hint {
+  font-size: 10px;
+  color: var(--text3);
+  line-height: 1.7;
+  padding: 8px;
+  background: var(--surface2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.ctrl-hint b { color: var(--gold); }
+
+/* ── RIGHT PANEL ──────────────────────────────────────── */
+.rpanel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── KEYBOARD CANVAS ──────────────────────────────────── */
+.kb-canvas {
+  background: var(--surface);
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+}
+.kb-row {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 3px;
+  height: 58px;
+  background: var(--surface2);
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius);
+  padding: 3px;
+  align-items: stretch;
+  position: relative;
+  transition: background .15s, border-color .15s;
+}
+.kb-row.drag-over { background: var(--gold-s); border-color: var(--gold); border-style: solid; }
+.row-empty-hint {
+  font-size: 10px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  pointer-events: none;
+  user-select: none;
+  font-style: italic;
+}
+.drop-ind {
+  width: 3px;
+  align-self: stretch;
+  background: var(--gold);
+  border-radius: 2px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* placed character key */
+.ck {
+  position: relative;
+  width: 48px;
+  flex-shrink: 0;
+  align-self: stretch;
+  background: var(--key-bg);
+  border: 1px solid var(--key-bdr);
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  overflow: hidden;
+  transition: border-color .12s, box-shadow .12s;
+  font-family: var(--ml);
+  box-shadow: var(--shadow);
+}
+.ck:hover { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-s), var(--shadow); }
+.ck.sel { border-color: var(--accent) !important; box-shadow: 0 0 0 2px var(--accent-s) !important; }
+.ck.extra-k { border-color: var(--gold) !important; background: var(--gold-s); }
+.ck .qc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+  overflow: hidden;
+}
+.ck .qc.tl { background: var(--l-ss);     color: var(--l-ss-t); }
+.ck .qc.tr { background: var(--l-shift);  color: var(--l-shift-t); }
+.ck .qc.bl { background: var(--l-symbl);  color: var(--l-symbl-t); }
+.ck .qc.br { background: var(--l-normal); color: var(--l-normal-t); }
+.ck.flash { box-shadow: 0 0 0 2px var(--gold), 0 0 8px var(--gold-s) !important; }
+
+/* placed space key */
+.sk {
+  position: relative;
+  flex-shrink: 0;
+  align-self: stretch;
+  background: var(--key-bg);
+  border: 1px solid var(--key-bdr);
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text3);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: border-color .12s;
+}
+.sk:hover { border-color: var(--gold); }
+
+/* placed modifier key */
+.mk {
+  position: relative;
+  flex-shrink: 0;
+  align-self: stretch;
+  background: var(--mod-bg);
+  border: 1px solid var(--mod-bdr);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text2);
+  min-width: 42px;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all .12s;
+}
+.mk:hover { border-color: var(--text2); }
+.mk.active-mod { background: var(--accent-s); color: var(--accent); border-color: var(--accent); font-weight: 600; }
+
+/* delete button */
+.del-btn {
+  position: absolute;
+  top: 0; right: 0;
+  width: 14px; height: 14px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 9px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 0 5px 0 3px;
+  font-weight: 700;
+}
+.ck:hover .del-btn,
+.mk:hover .del-btn,
+.sk:hover .del-btn { display: flex; }
+
+/* resize handle */
+.rh {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 6px;
+  cursor: ew-resize;
+  background: linear-gradient(to right, transparent, rgba(0,0,0,.06));
+  border-radius: 0 5px 5px 0;
+  z-index: 5;
+}
+.rh:hover { background: linear-gradient(to right, transparent, var(--gold-s)); }
+
+/* ── EDITOR ───────────────────────────────────────────── */
+.editor {
+  background: var(--surface);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  min-height: 148px;
+}
+.editor-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.editor-header h3 {
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.editor-empty {
+  color: var(--text3);
+  font-size: 11px;
+  font-style: italic;
+  text-align: center;
+  padding: 20px 0;
+}
+.qeds {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.qed label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  display: block;
+  margin-bottom: 3px;
+}
+.qed.tl label { color: var(--l-ss-t); }
+.qed.tr label { color: var(--l-shift-t); }
+.qed.bl label { color: var(--l-symbl-t); }
+.qed.br label { color: var(--l-normal-t); }
+.qed input {
+  font-family: var(--ml);
+  font-size: 16px;
+  width: 100%;
+  padding: 4px 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  text-align: center;
+  outline: none;
+  transition: border-color .15s;
+}
+.qed input:focus { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 2px var(--accent-s); }
+.qed-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.qed-row2 .qed label { color: var(--text2); }
+.qed-row2 .qed input { font-family: var(--mono); font-size: 13px; }
+.ehint { font-size: 10px; color: var(--text3); margin-top: 5px; font-style: italic; }
+
+/* ── TEST AREA ────────────────────────────────────────── */
+.testarea {
+  flex: 1;
+  padding: 10px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  min-height: 0;
+}
+.trow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.trow h3 {
+  font-size: 10px;
+  color: var(--text2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.pills { display: flex; gap: 4px; }
+.pill {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  background: var(--surface2);
+  color: var(--text3);
+  border: 1px solid var(--border);
+  transition: all .15s;
+}
+.pill.on    { background: var(--accent-s); color: var(--accent); border-color: var(--accent); }
+.pill.son   { background: var(--gold-s);   color: var(--gold);   border-color: var(--gold); }
+.pill.capson{ background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
+
+/* simulate toggle */
+.sim-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border-left: 1px solid var(--border);
+}
+.sim-wrap span { font-size: 10px; color: var(--text2); white-space: nowrap; }
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: .04em;
+}
+.toggle-btn .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--border2); transition: background .15s;
+}
+.toggle-btn.active { background: var(--gold-s); border-color: var(--gold); color: var(--gold); }
+.toggle-btn.active .dot { background: var(--gold); }
+
+.sim-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sim-ctrl span { font-size: 10px; color: var(--text2); white-space: nowrap; }
+.sim-ctrl select {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--ui);
+  font-size: 10px;
+  padding: 3px 6px;
+  outline: none;
+  cursor: pointer;
+}
+.tbtns { margin-left: auto; display: flex; gap: 6px; }
+
+/* buttons */
+.btn {
+  padding: 5px 12px;
+  border-radius: var(--radius);
+  font-family: var(--ui);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all .15s;
+  letter-spacing: .02em;
+}
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: #a93226; border-color: #a93226; }
+.btn-secondary { background: var(--surface2); border-color: var(--border); color: var(--text2); }
+.btn-secondary:hover { border-color: var(--text2); color: var(--text); }
+
+/* output textarea */
+textarea {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  font-family: var(--ml);
+  font-size: 19px;
+  padding: 10px 14px;
+  resize: none;
+  outline: none;
+  line-height: 1.75;
+  min-height: 0;
+  transition: border-color .15s, box-shadow .15s;
+  box-shadow: var(--shadow);
+}
+textarea::placeholder { color: var(--text3); font-size: 14px; font-family: var(--ui); font-style: italic; }
+textarea:focus { border-color: var(--border2); box-shadow: var(--shadow-md); }
+textarea.sim-active { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-s), var(--shadow-md); }
+
+/* export / copy map panel */
+.export-out {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text2);
+  white-space: pre;
+  overflow: auto;
+  max-height: 90px;
+  display: none;
+  flex-shrink: 0;
+}
+
+/* loading overlay */
+.load-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--surface);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.load-overlay.show { opacity: 1; pointer-events: all; }
+.load-spinner {
+  width: 28px; height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.load-text { font-size: 12px; color: var(--text2); }
+
+/* ── FOOTER ───────────────────────────────────────────── */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 0 18px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+footer a {
+  font-size: 10px;
+  color: var(--text3);
+  text-decoration: none;
+  transition: color .15s;
+}
+footer a:hover { color: var(--accent); }
+.footer-sep { font-size: 10px; color: var(--border2); }
+
+/* ── MOBILE NOTICE ────────────────────────────────────── */
+.mobile-notice {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--surface);
+  z-index: 100;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  gap: 16px;
+}
+.mobile-notice h2 { font-size: 20px; font-family: var(--ml); color: var(--accent); }
+.mobile-notice p { font-size: 13px; color: var(--text2); line-height: 1.7; max-width: 300px; }
+@media (max-width: 700px) {
+  .mobile-notice { display: flex; }
+}
+</style>
 </head>
 <body>
-  <h1>ഗ്രന്ഥം രസവാൻ</h1>
-  <p class="sub">Granthom Rasavan — Malayalam Keyboard Layout Simulator</p>
 
-  <div class="notice">
-    <strong>Simulator coming soon.</strong>
-    <p style="margin-top:12px">
-      The interactive layout builder and typing simulator will be hosted here
-      via GitHub Pages. The full layout definition is available at
-      <a href="../layout/granthom_rasavan_v1.2.json">layout/granthom_rasavan_v1.2.json</a>.
-    </p>
-    <p style="margin-top:12px">
-      See the <a href="https://github.com/KSJeshin/granthom-rasavan">repository</a>
-      for the current project status.
-    </p>
+<!-- Loading overlay -->
+<div class="load-overlay" id="load-overlay">
+  <div class="load-spinner"></div>
+  <div class="load-text" id="load-text">Loading default layout…</div>
+</div>
+
+<!-- Mobile notice -->
+<div class="mobile-notice">
+  <div style="font-size:40px">⌨️</div>
+  <h2>ഗ്രന്ഥം രസവാൻ</h2>
+  <p>The keyboard simulator requires a desktop browser with a physical keyboard. Please open this page on a desktop or laptop.</p>
+  <a href="https://github.com/KSJeshin/granthom-rasavan" style="font-size:12px;color:var(--accent)">View on GitHub →</a>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="brand">
+    <span class="brand-ml">ഗ്രന്ഥം രസവാൻ</span>
+    <span class="brand-en">Granthom Rasavan</span>
   </div>
+  <div class="brand-sep"></div>
+  <span class="header-tag">Malayalam Keyboard Simulator</span>
+  <span class="version-badge">v1.2</span>
+  <span class="header-hint">Drag keys onto rows · Click to type · Enable Simulate to use physical keyboard</span>
+  <div class="hbtns">
+    <button class="btn btn-secondary" onclick="saveLayout()" title="Download current layout as JSON">⬇ Save</button>
+    <label class="btn btn-secondary" style="cursor:pointer;" title="Upload a previously saved layout JSON">⬆ Load<input type="file" accept=".json" onchange="loadLayout(event)" style="display:none;"></label>
+    <button class="btn btn-secondary" onclick="resetToDefault()" title="Reload the default Granthom Rasavan v1.2 layout">↺ Reset</button>
+    <button class="btn btn-secondary" onclick="copyMap()" id="btn-copymap" title="Copy Unicode character map to clipboard">📋 Copy Map</button>
+    <button class="btn btn-secondary" onclick="clearLayout()" title="Remove all keys from canvas">✕ Clear</button>
+  </div>
+</header>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="li"><div class="ld" style="background:var(--l-normal);border:1px solid var(--l-normal-t)"></div>Normal</div>
+  <div class="li"><div class="ld" style="background:var(--l-shift);border:1px solid var(--l-shift-t)"></div>Shift</div>
+  <div class="li"><div class="ld" style="background:var(--l-symbl);border:1px solid var(--l-symbl-t)"></div>Symbl / AltGr</div>
+  <div class="li"><div class="ld" style="background:var(--l-ss);border:1px solid var(--l-ss-t)"></div>Symbl + Shift</div>
+  <span class="legend-hint">Hover key → × to remove · Drag right edge to resize</span>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- LEFT PANEL -->
+  <div class="lpanel">
+    <div class="ptabs">
+      <button class="ptab active" onclick="showTab('keys')">Palette</button>
+      <button class="ptab" onclick="showTab('chars')">Characters</button>
+      <button class="ptab" onclick="showTab('state')">Controls</button>
+    </div>
+
+    <!-- Palette tab -->
+    <div class="pcontent show" id="tab-keys">
+      <div class="piece-section">
+        <div class="piece-label">Modifier Keys</div>
+        <div class="piece-grid" id="mod-palette"></div>
+      </div>
+      <div class="piece-section">
+        <div class="piece-label">Character Keys</div>
+        <div class="piece-grid" id="char-palette"></div>
+      </div>
+    </div>
+
+    <!-- Characters tab -->
+    <div class="pcontent" id="tab-chars">
+      <div class="cgroup"><div class="cglabel">Independent Vowels</div><div class="cgrid" id="cg-v"></div></div>
+      <div class="cgroup"><div class="cglabel">Vowel Signs (Matras)</div><div class="cgrid" id="cg-m"></div></div>
+      <div class="cgroup"><div class="cglabel">Consonants</div><div class="cgrid" id="cg-c"></div></div>
+      <div class="cgroup"><div class="cglabel">Chillus</div><div class="cgrid" id="cg-ch"></div></div>
+      <div class="cgroup"><div class="cglabel">Special Characters</div><div class="cgrid" id="cg-sp"></div></div>
+      <div class="cgroup"><div class="cglabel">Malayalam Numerals</div><div class="cgrid" id="cg-n"></div></div>
+    </div>
+
+    <!-- Controls tab -->
+    <div class="pcontent" id="tab-state">
+      <div class="ctrl-section">
+        <div class="ctrl-label">Modifier State</div>
+        <button class="ctrl-btn" id="btn-sh" onclick="toggleMod('shift')">
+          <span class="ctrl-dot"></span>⇧ Shift: <span id="sh-val">OFF</span>
+        </button>
+        <button class="ctrl-btn" id="btn-sy" onclick="toggleMod('symbl')">
+          <span class="ctrl-dot"></span>Symbl / AltGr: <span id="sy-val">OFF</span>
+        </button>
+        <button class="ctrl-btn" id="btn-ca">
+          <span class="ctrl-dot"></span>Caps Lock: <span id="caps-state-text">OFF — Malayalam</span>
+        </button>
+      </div>
+      <div class="ctrl-section">
+        <div class="ctrl-label">Quick Reference</div>
+        <div class="ctrl-hint">
+          <b>Normal</b> = base consonant / matra<br>
+          <b>Shift</b> = consonant+virama / independent vowel<br>
+          <b>Symbl</b> = chillu / Malayalam digit<br>
+          <b>Symbl+Shift</b> = rare / archaic / Grantha<br>
+          <b>Caps Lock</b> = English QWERTY toggle<br>
+          <b>Double-tap Symbl</b> = sticky Symbl mode<br>
+          <b>★ keys</b> = extra centre keys (custom hardware)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="rpanel">
+
+    <!-- Keyboard canvas -->
+    <div class="kb-canvas">
+      <div id="row0" class="kb-row" data-row="0"></div>
+      <div id="row1" class="kb-row" data-row="1"></div>
+      <div id="row2" class="kb-row" data-row="2"></div>
+      <div id="row3" class="kb-row" data-row="3"></div>
+      <div id="row4" class="kb-row" data-row="4"></div>
+    </div>
+
+    <!-- Key editor -->
+    <div class="editor">
+      <div class="editor-header">
+        <h3 id="ed-title">Key Editor</h3>
+      </div>
+      <div id="ed-body">
+        <div class="editor-empty">Place a character key on the canvas above, then click it to edit its layers</div>
+      </div>
+    </div>
+
+    <!-- Output area -->
+    <div class="testarea">
+      <div class="trow">
+        <h3>Output</h3>
+        <div class="pills">
+          <span class="pill" id="pill-sh">SHIFT</span>
+          <span class="pill" id="pill-sy">SYMBL</span>
+          <span class="pill" id="pill-ca">CAPS</span>
+        </div>
+        <div class="sim-wrap">
+          <span>Physical keyboard:</span>
+          <button class="toggle-btn" id="sim-toggle" onclick="toggleSimBtn()">
+            <span class="dot"></span><span id="sim-lbl">OFF</span>
+          </button>
+          <div class="sim-ctrl">
+            <span>Symbl key:</span>
+            <select id="symbl-sel" onchange="setSymblKey(this.value)">
+              <option value="AltLeft">Alt Left</option>
+              <option value="AltRight">Alt Right</option>
+              <option value="AltGraph">AltGr</option>
+              <option value="MetaLeft">Win/Cmd Left</option>
+              <option value="MetaRight">Win/Cmd Right</option>
+              <option value="ContextMenu">Menu key</option>
+              <option value="ScrollLock">Scroll Lock</option>
+              <option value="Pause">Pause</option>
+            </select>
+          </div>
+        </div>
+        <div class="tbtns">
+          <button class="btn btn-secondary" onclick="clearOut()">Clear</button>
+        </div>
+      </div>
+      <textarea id="output" placeholder="Click placed keys to type · or enable physical keyboard simulation above…"></textarea>
+      <div class="export-out" id="export-out"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <a href="https://github.com/KSJeshin/granthom-rasavan" target="_blank">GitHub Repository</a>
+  <span class="footer-sep">·</span>
+  <a href="https://github.com/KSJeshin/granthom-rasavan/blob/main/docs/design/DESIGN.md" target="_blank">Design Rationale</a>
+  <span class="footer-sep">·</span>
+  <a href="https://github.com/KSJeshin/granthom-rasavan/issues" target="_blank">Report Issue</a>
+  <span class="footer-sep" style="margin-left:auto">Layout v1.2 · Granthom Rasavan · © 2025 KSJeshin</span>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA  (unchanged from original)
+// ═══════════════════════════════════════════════════════
+const VIR = '\u0D4D';
+const c = ch => ch + VIR;
+
+const ML = {
+  v:  ['അ','ആ','ഇ','ഈ','ഉ','ഊ','ഋ','എ','ഏ','ഐ','ഒ','ഓ','ഔ'],
+  m:  ['ാ','ി','ീ','ു','ൂ','ൃ','െ','േ','ൈ','ൊ','ോ','ൗ'],
+  c:  ['ക','ഖ','ഗ','ഘ','ങ','ച','ഛ','ജ','ഝ','ഞ','ട','ഠ','ഡ','ഢ','ണ',
+       'ത','ഥ','ദ','ധ','ന','പ','ഫ','ബ','ഭ','മ','യ','ര','ല','വ','ശ',
+       'ഷ','സ','ഹ','ള','ഴ','റ'],
+  ch: ['ൺ','ൻ','ൽ','ൾ','ർ','ൿ'],
+  sp: [{ch:'ം',lb:'ം'},{ch:'ഃ',lb:'ഃ'},{ch:'ഽ',lb:'ഽ'},{ch:'\u0D4D',lb:'്'},
+       {ch:'\u200D',lb:'ZWJ'},{ch:'\u200C',lb:'ZWN'},{ch:'।',lb:'।'},{ch:'॥',lb:'॥'}],
+  n:  ['൦','൧','൨','൩','൪','൫','൬','൭','൮','൯']
+};
+
+const ENGLISH_MAP = {
+  '`':{base:'`',shift:'~'},'1':{base:'1',shift:'!'},'2':{base:'2',shift:'@'},
+  '3':{base:'3',shift:'#'},'4':{base:'4',shift:'$'},'5':{base:'5',shift:'%'},
+  '6':{base:'6',shift:'^'},'7':{base:'7',shift:'&'},'8':{base:'8',shift:'*'},
+  '9':{base:'9',shift:'('},'0':{base:'0',shift:')'},'-':{base:'-',shift:'_'},
+  '=':{base:'=',shift:'+'},'[':{base:'[',shift:'{'},']':{base:']',shift:'}'},
+  '\\':{base:'\\',shift:'|'},';':{base:';',shift:':'},"'":{base:"'",shift:'"'},
+  ',':{base:',',shift:'<'},'.':{base:'.',shift:'>'},'/':{base:'/',shift:'?'}
+};
+
+const CHAR_KEYS = [
+  {id:'r0g',lb:'`',  br:c('ഢ'),tr:'ഢ', bl:'`', tl:'~', ph:'`', phShift:'~'},
+  {id:'r01', lb:'1', br:c('ഞ'),tr:'ഞ', bl:'1', tl:'!', ph:'1', phShift:'!'},
+  {id:'r02', lb:'2', br:c('ഘ'),tr:'ഘ', bl:'2', tl:'@', ph:'2', phShift:'@'},
+  {id:'r03', lb:'3', br:'ൗ',   tr:'ഔ', bl:'3', tl:'#', ph:'3', phShift:'#'},
+  {id:'r04', lb:'4', br:c('ഫ'),tr:'ഫ', bl:'4', tl:'$', ph:'4', phShift:'$'},
+  {id:'r05', lb:'5', br:'ൂ',   tr:'ഊ', bl:'5', tl:'%', ph:'5', phShift:'%'},
+  {id:'r06', lb:'6', br:c('ഥ'),tr:'ഥ', bl:'6', tl:'^', ph:'6', phShift:'^'},
+  {id:'r07', lb:'7', br:c('ഴ'),tr:'ഴ', bl:'7', tl:'&', ph:'7', phShift:'&'},
+  {id:'r08', lb:'8', br:c('ധ'),tr:'ധ', bl:'8', tl:'*', ph:'8', phShift:'*'},
+  {id:'r09', lb:'9', br:c('ഖ'),tr:'ഖ', bl:'9', tl:'(', ph:'9', phShift:'('},
+  {id:'r00', lb:'0', br:c('ഠ'),tr:'ഠ', bl:'0', tl:')', ph:'0', phShift:')'},
+  {id:'r0-', lb:'-', br:c('ങ'),tr:'ങ', bl:'-', tl:'_', ph:'-', phShift:'_'},
+  {id:'r0=', lb:'=', br:c('ഛ'),tr:'ഛ', bl:'=', tl:'+', ph:'=', phShift:'+'},
+  {id:'r0x', lb:'+', br:c('ഝ'),tr:'ഝ', bl:'\\',tl:'|', ph:'\\', phShift:'|'},
+  {id:'r1q', lb:'Q', br:c('ബ'),tr:'ബ', bl:'q', tl:'Q', ph:'q', phShift:'Q'},
+  {id:'r1w', lb:'W', br:c('റ'),tr:'റ', bl:'w', tl:'W', ph:'w', phShift:'W'},
+  {id:'r1e', lb:'E', br:c('ട'),tr:'ട', bl:'e', tl:'E', ph:'e', phShift:'E'},
+  {id:'r1r', lb:'R', br:'ൊ',   tr:'ഒ', bl:'r', tl:'R', ph:'r', phShift:'R'},
+  {id:'r1t', lb:'T', br:'ീ',   tr:'ഈ', bl:'t', tl:'T', ph:'t', phShift:'T'},
+  {id:'x1',  lb:'★1',br:'ം',   tr:'ഃ', bl:'',  tl:'',  ph:'', phShift:'', extra:true},
+  {id:'r1y', lb:'Y', br:'അ',   tr:'ആ', bl:'y', tl:'Y', ph:'y', phShift:'Y'},
+  {id:'r1u', lb:'U', br:'ൈ',   tr:'ഐ', bl:'u', tl:'U', ph:'u', phShift:'U'},
+  {id:'r1i', lb:'I', br:c('സ'),tr:'സ', bl:'i', tl:'I', ph:'i', phShift:'I'},
+  {id:'r1o', lb:'O', br:c('ജ'),tr:'ജ', bl:'o', tl:'O', ph:'o', phShift:'O'},
+  {id:'r1p', lb:'P', br:c('ച'),tr:'ച', bl:'p', tl:'P', ph:'p', phShift:'P'},
+  {id:'r1[', lb:'[', br:'ൃ',   tr:'ഋ', bl:'[', tl:'{', ph:'[', phShift:'{'},
+  {id:'r1]', lb:']', br:c('ഡ'),tr:'ഡ', bl:']', tl:'}', ph:']', phShift:'}'},
+  {id:'r1bs',lb:'\\',br:c('ഹ'),tr:'ഹ', bl:'\\',tl:'|', ph:'\\', phShift:'|'},
+  {id:'r2a', lb:'A', br:'ോ',   tr:'ഓ', bl:'a', tl:'A', ph:'a', phShift:'A'},
+  {id:'r2s', lb:'S', br:'ാ',   tr:'ആ', bl:'s', tl:'S', ph:'s', phShift:'S'},
+  {id:'r2d', lb:'D', br:'ി',   tr:'ഇ', bl:'d', tl:'D', ph:'d', phShift:'D'},
+  {id:'r2f', lb:'F', br:c('ക'),tr:'ക', bl:'f', tl:'F', ph:'f', phShift:'F'},
+  {id:'r2g', lb:'G', br:c('ന'),tr:'ന', bl:'g', tl:'G', ph:'g', phShift:'G'},
+  {id:'x2',  lb:'★2',br:'ർ',   tr:'ൻ', bl:'',  tl:'',  ph:'', phShift:'', extra:true},
+  {id:'r2h', lb:'H', br:c('ര'),tr:'ര', bl:'h', tl:'H', ph:'h', phShift:'H'},
+  {id:'r2j', lb:'J', br:c('യ'),tr:'യ', bl:'j', tl:'J', ph:'j', phShift:'J'},
+  {id:'r2k', lb:'K', br:'ു',   tr:'ഉ', bl:'k', tl:'K', ph:'k', phShift:'K'},
+  {id:'r2l', lb:'L', br:'െ',   tr:'എ', bl:'l', tl:'L', ph:'l', phShift:'L'},
+  {id:'r2sc',lb:';', br:'േ',   tr:'ഏ', bl:';', tl:':', ph:';', phShift:':'},
+  {id:'r2qt',lb:"'", br:c('വ'),tr:'വ', bl:"'", tl:'"', ph:"'", phShift:'"'},
+  {id:'r3z', lb:'Z', br:c('ള'),tr:'ൾ', bl:'z', tl:'Z', ph:'z', phShift:'Z'},
+  {id:'r3x', lb:'X', br:c('ല'),tr:'ൽ', bl:'x', tl:'X', ph:'x', phShift:'X'},
+  {id:'r3c', lb:'C', br:c('ണ'),tr:'ൺ', bl:'c', tl:'C', ph:'c', phShift:'C'},
+  {id:'r3v', lb:'V', br:c('മ'),tr:'മ', bl:'v', tl:'V', ph:'v', phShift:'V'},
+  {id:'r3b', lb:'B', br:c('ഷ'),tr:'ഷ', bl:'b', tl:'B', ph:'b', phShift:'B'},
+  {id:'x3',  lb:'★3',br:'ൿ',   tr:'ഽ', bl:'',  tl:'',  ph:'', phShift:'', extra:true},
+  {id:'r3n', lb:'N', br:c('പ'),tr:'പ', bl:'n', tl:'N', ph:'n', phShift:'N'},
+  {id:'r3m', lb:'M', br:c('ത'),tr:'ത', bl:'m', tl:'M', ph:'m', phShift:'M'},
+  {id:'r3cm',lb:',', br:c('ഗ'),tr:'ഗ', bl:',', tl:'<', ph:',', phShift:'<'},
+  {id:'r3dt',lb:'.', br:c('ശ'),tr:'ശ', bl:'.', tl:'>', ph:'.', phShift:'>'},
+  {id:'r3sl',lb:'/', br:c('ദ'),tr:'ദ', bl:'/', tl:'?', ph:'/', phShift:'?'},
+  {id:'r3bh',lb:'?', br:c('ഭ'),tr:'ഭ', bl:'?', tl:'?', ph:'?', phShift:'?'},
+  {id:'sp',  lb:'Space', br:' ', tr:' ', bl:' ', tl:' ', ph:' ', phShift:' ', isSpace:true},
+];
+
+const MOD_KEYS = [
+  {id:'tab',  lb:'Tab'},      {id:'caps', lb:'Caps Lock'},
+  {id:'lsh',  lb:'⇧ Shift'},  {id:'rsh',  lb:'⇧ Shift'},
+  {id:'lct',  lb:'Ctrl'},     {id:'rct',  lb:'Ctrl'},
+  {id:'lalt', lb:'Alt'},      {id:'ralt', lb:'Alt'},
+  {id:'lsy',  lb:'Symbl'},    {id:'rsy',  lb:'Symbl'},
+  {id:'bksp', lb:'⌫ Back'},   {id:'enter',lb:'Enter ↵'},
+  {id:'menu', lb:'Menu'},     {id:'opr',  lb:'Opr.Sys'},
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+const st = {shift:false, symbl:false, sticky:false, caps:false, sel:null};
+const placed = {};
+const rows = [[],[],[],[],[]];
+let uid = 0;
+let dragType = null, dragData = {};
+let simActive = false, symblKey = 'AltLeft', symblHeld = false;
+
+// ═══════════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════════
+function showTab(t) {
+  document.querySelectorAll('.pcontent').forEach(el => el.classList.remove('show'));
+  document.getElementById('tab-' + t).classList.add('show');
+  document.querySelectorAll('.ptab').forEach((el, i) => {
+    el.classList.toggle('active', ['keys','chars','state'][i] === t);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// BUILD PALETTE
+// ═══════════════════════════════════════════════════════
+function buildPalette() {
+  const mp = document.getElementById('mod-palette');
+  MOD_KEYS.forEach(k => {
+    const el = document.createElement('div');
+    el.className = 'pk-mod';
+    el.textContent = k.lb;
+    el.draggable = true;
+    el.dataset.modId = k.id;
+    el.addEventListener('dragstart', e => {
+      dragType = 'mod';
+      dragData = {modId: k.id, modLb: k.lb};
+      e.dataTransfer.effectAllowed = 'copy';
+      e.dataTransfer.setData('text/plain', k.id);
+      e.currentTarget.style.opacity = '0.5';
+      e.currentTarget.addEventListener('dragend', ev => ev.currentTarget.style.opacity='1', {once:true});
+    });
+    mp.appendChild(el);
+  });
+
+  const cp = document.getElementById('char-palette');
+  CHAR_KEYS.forEach(k => {
+    let el;
+    if (k.isSpace) {
+      el = document.createElement('div');
+      el.className = 'pk-space';
+      el.textContent = '⎵ Space';
+    } else {
+      el = document.createElement('div');
+      el.className = 'pk-char';
+      if (k.extra) { el.style.borderColor = 'var(--gold)'; el.style.background = 'var(--gold-s)'; }
+      ['tl','tr','bl','br'].forEach(pos => {
+        const q = document.createElement('div');
+        q.className = 'pk-q ' + pos;
+        q.textContent = disp(k[pos]);
+        el.appendChild(q);
+      });
+    }
+    el.draggable = true;
+    el.title = k.lb + (k.ph ? ' (ph: ' + k.ph + ')' : '');
+    el.addEventListener('dragstart', e => {
+      dragType = 'char';
+      dragData = {charId: k.id};
+      e.dataTransfer.effectAllowed = 'copy';
+      e.dataTransfer.setData('text/plain', k.id);
+      e.currentTarget.style.opacity = '0.5';
+      e.currentTarget.addEventListener('dragend', ev => ev.currentTarget.style.opacity='1', {once:true});
+    });
+    cp.appendChild(el);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// BUILD CHARACTER PANEL
+// ═══════════════════════════════════════════════════════
+function buildCharPanel() {
+  function fill(id, arr, isObj) {
+    const el = document.getElementById(id);
+    arr.forEach(item => {
+      const ch = isObj ? item.ch : item;
+      const lb = isObj ? item.lb : item;
+      const t = document.createElement('div');
+      t.className = 'ctile' + (lb.length > 2 ? ' ctile-sm' : '');
+      t.textContent = lb;
+      t.title = 'Copy: ' + ch + ' (U+' + ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0') + ')';
+      t.onclick = () => {
+        navigator.clipboard.writeText(ch).catch(()=>{});
+        t.classList.add('copied');
+        setTimeout(() => t.classList.remove('copied'), 700);
+      };
+      el.appendChild(t);
+    });
+  }
+  fill('cg-v',  ML.v);
+  fill('cg-m',  ML.m);
+  fill('cg-c',  ML.c);
+  fill('cg-ch', ML.ch);
+  fill('cg-sp', ML.sp, true);
+  fill('cg-n',  ML.n);
+}
+
+// ═══════════════════════════════════════════════════════
+// DRAG & DROP
+// ═══════════════════════════════════════════════════════
+function getDropIdx(rowEl, clientX) {
+  const kids = [...rowEl.children].filter(c =>
+    !c.classList.contains('row-empty-hint') && !c.classList.contains('drop-ind'));
+  for (let i = 0; i < kids.length; i++) {
+    const r = kids[i].getBoundingClientRect();
+    if (clientX < r.left + r.width / 2) return i;
+  }
+  return kids.length;
+}
+function showInd(rowEl, idx) {
+  removeInd();
+  const ind = document.createElement('div');
+  ind.className = 'drop-ind'; ind.id = 'drop-ind';
+  const kids = [...rowEl.children].filter(c => !c.classList.contains('row-empty-hint'));
+  if (idx >= kids.length) rowEl.appendChild(ind);
+  else rowEl.insertBefore(ind, kids[idx]);
+}
+function removeInd() { document.getElementById('drop-ind')?.remove(); }
+
+function setupRows() {
+  for (let r = 0; r < 5; r++) {
+    const rowEl = document.getElementById('row' + r);
+    rowEl.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = dragType === 'move' ? 'move' : 'copy';
+      rowEl.classList.add('drag-over');
+      if (dragType === 'move') showInd(rowEl, getDropIdx(rowEl, e.clientX));
+    });
+    rowEl.addEventListener('dragleave', e => {
+      if (!rowEl.contains(e.relatedTarget)) { rowEl.classList.remove('drag-over'); removeInd(); }
+    });
+    rowEl.addEventListener('drop', e => {
+      e.preventDefault();
+      rowEl.classList.remove('drag-over');
+      const idx = getDropIdx(rowEl, e.clientX);
+      removeInd();
+      if (dragType === 'char') dropChar(r, dragData.charId, idx);
+      else if (dragType === 'mod') dropMod(r, dragData.modId, dragData.modLb, idx);
+      else if (dragType === 'move') moveKey(dragData.iid, r, idx);
+      dragType = null;
+    });
+  }
+}
+
+function dropChar(rowIdx, charId, idx) {
+  const def = CHAR_KEYS.find(k => k.id === charId);
+  if (!def) return;
+  const iid = 'k' + (uid++);
+  placed[iid] = {
+    charId, lb: def.lb, extra: def.extra||false, isSpace: def.isSpace||false,
+    br: def.br||'', tr: def.tr||'', bl: def.bl||'', tl: def.tl||'',
+    ph: def.ph||'', phShift: def.phShift||''
+  };
+  if (def.isSpace) placed[iid].width = 220;
+  rows[rowIdx].splice(idx, 0, iid);
+  renderRow(rowIdx); autoSave();
+}
+function dropMod(rowIdx, modId, modLb, idx) {
+  const iid = 'm' + (uid++);
+  placed[iid] = {modId, lb: modLb, isMod: true, width: 70};
+  rows[rowIdx].splice(idx, 0, iid);
+  renderRow(rowIdx); autoSave();
+}
+function moveKey(iid, toRow, toIdx) {
+  let fromRow = -1, fromIdx = -1;
+  for (let r = 0; r < 5; r++) {
+    const i = rows[r].indexOf(iid);
+    if (i !== -1) { fromRow = r; fromIdx = i; break; }
+  }
+  if (fromRow === -1) return;
+  rows[fromRow].splice(fromIdx, 1);
+  const adj = (fromRow === toRow && fromIdx < toIdx) ? toIdx - 1 : toIdx;
+  rows[toRow].splice(adj, 0, iid);
+  new Set([fromRow, toRow]).forEach(r => renderRow(r));
+  autoSave();
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER ROW
+// ═══════════════════════════════════════════════════════
+function renderRow(r) {
+  const rowEl = document.getElementById('row' + r);
+  rowEl.innerHTML = '';
+  if (rows[r].length === 0) {
+    const h = document.createElement('div');
+    h.className = 'row-empty-hint';
+    h.textContent = 'Drop keys here';
+    rowEl.appendChild(h);
+    return;
+  }
+  rows[r].forEach(iid => {
+    const p = placed[iid];
+    if (p.isMod) renderMod(rowEl, iid, p);
+    else if (p.isSpace) renderSpace(rowEl, iid, p);
+    else renderChar(rowEl, iid, p);
+  });
+}
+function makeDraggable(el, iid) {
+  el.draggable = true;
+  el.addEventListener('dragstart', e => {
+    e.stopPropagation();
+    dragType = 'move'; dragData = {iid};
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', iid);
+    e.currentTarget.style.opacity = '0.4';
+    e.currentTarget.addEventListener('dragend', ev => ev.currentTarget.style.opacity='1', {once:true});
+  });
+}
+function makeDelBtn(parent, iid) {
+  const d = document.createElement('div');
+  d.className = 'del-btn'; d.textContent = '×';
+  d.onmousedown = e => { e.preventDefault(); e.stopPropagation(); removeKey(iid); };
+  parent.appendChild(d);
+}
+function makeResizeHandle(el, iid) {
+  const rh = document.createElement('div');
+  rh.className = 'rh';
+  rh.addEventListener('mousedown', e => {
+    e.preventDefault(); e.stopPropagation();
+    const startX = e.clientX;
+    const startWidth = placed[iid].width || (placed[iid].isSpace ? 220 : placed[iid].isMod ? 70 : 48);
+    const onMove = ev => { ev.preventDefault(); placed[iid].width = Math.max(40, startWidth + ev.clientX - startX); el.style.width = placed[iid].width + 'px'; };
+    const onUp = () => { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); autoSave(); };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+  rh.addEventListener('dragstart', e => { e.preventDefault(); e.stopPropagation(); });
+  el.appendChild(rh);
+}
+function renderChar(rowEl, iid, p) {
+  const el = document.createElement('div');
+  el.className = 'ck' + (p.extra ? ' extra-k' : '');
+  el.id = 'ck-' + iid;
+  // Apply saved width — default 48px, but user may have resized
+  if (p.width && p.width !== 48) {
+    el.style.width = p.width + 'px';
+  }
+  ['tl','tr','bl','br'].forEach(pos => {
+    const q = document.createElement('div');
+    q.className = 'qc ' + pos; q.id = 'qd-' + iid + '-' + pos;
+    q.textContent = disp(p[pos]);
+    el.appendChild(q);
+  });
+  makeDelBtn(el, iid);
+  makeResizeHandle(el, iid);  // ← resize handle added to char keys
+  makeDraggable(el, iid);
+  el.onclick = () => selectKey(iid);
+  rowEl.appendChild(el);
+}
+function renderSpace(rowEl, iid, p) {
+  const el = document.createElement('div');
+  el.className = 'sk'; el.id = 'ck-' + iid;
+  el.style.width = (p.width || 220) + 'px';
+  el.style.minWidth = '40px';
+  const lbl = document.createElement('span'); lbl.textContent = '⎵'; lbl.style.pointerEvents = 'none';
+  el.appendChild(lbl);
+  makeDelBtn(el, iid); makeResizeHandle(el, iid); makeDraggable(el, iid);
+  el.onclick = () => typeChar(' ');
+  rowEl.appendChild(el);
+}
+function renderMod(rowEl, iid, p) {
+  const el = document.createElement('div');
+  el.className = 'mk'; el.id = 'mk-' + iid;
+  el.style.width = (p.width || 70) + 'px'; el.style.minWidth = '40px';
+  const lbl = document.createElement('span'); lbl.textContent = p.lb; lbl.style.pointerEvents = 'none';
+  el.appendChild(lbl);
+  makeDelBtn(el, iid); makeResizeHandle(el, iid); makeDraggable(el, iid);
+  if (p.modId === 'lsh' || p.modId === 'rsh') el.onclick = () => toggleMod('shift');
+  else if (p.modId === 'lsy' || p.modId === 'rsy') {
+    let last = 0;
+    el.onclick = () => { const n=Date.now(); if(n-last<350) toggleSticky(); else toggleMod('symbl'); last=n; };
+  }
+  else if (p.modId === 'caps') el.onclick = () => {};
+  else if (p.modId === 'bksp') el.onclick = () => doBackspace();
+  else if (p.modId === 'enter') el.onclick = () => typeChar('\n');
+  rowEl.appendChild(el);
+  updateModVisual();
+}
+
+// ═══════════════════════════════════════════════════════
+// REMOVE KEY
+// ═══════════════════════════════════════════════════════
+function removeKey(iid) {
+  if (st.sel === iid) {
+    st.sel = null;
+    document.getElementById('ed-title').textContent = 'Key Editor';
+    document.getElementById('ed-body').innerHTML = '<div class="editor-empty">Place a character key on the canvas above, then click it to edit its layers</div>';
+  }
+  for (let r = 0; r < 5; r++) {
+    const i = rows[r].indexOf(iid);
+    if (i !== -1) { rows[r].splice(i, 1); renderRow(r); break; }
+  }
+  delete placed[iid]; autoSave();
+}
+
+// ═══════════════════════════════════════════════════════
+// SELECT + EDITOR
+// ═══════════════════════════════════════════════════════
+function selectKey(iid) {
+  if (st.sel) document.getElementById('ck-' + st.sel)?.classList.remove('sel');
+  st.sel = iid;
+  document.getElementById('ck-' + iid)?.classList.add('sel');
+  const p = placed[iid];
+  let ch = '';
+  const capsActive = st.caps;
+  if (capsActive) {
+    const physChar = p.ph || p.bl || p.lb?.toLowerCase() || '';
+    const engKey = ENGLISH_MAP[physChar];
+    if (engKey) ch = st.shift ? engKey.shift : engKey.base;
+    else if (physChar) ch = st.shift ? physChar.toUpperCase() : physChar.toLowerCase();
+  } else {
+    if (st.symbl && st.shift) ch = p.tl;
+    else if (st.shift) ch = p.tr;
+    else if (st.symbl) ch = p.bl;
+    else ch = p.br;
+  }
+  if (ch) typeChar(ch);
+  if (st.shift && !st.sticky) { st.shift = false; updateUI(); }
+
+  document.getElementById('ed-title').textContent = 'Editing: ' + (p.lb || p.charId) + ' (physical: ' + (p.ph || '?') + ')';
+  document.getElementById('ed-body').innerHTML =
+    '<div class="qeds">' +
+    ['tl','tr','bl','br'].map((pos, i) => {
+      const labels = ['Symbl+Shift','Shift','Symbl','Normal'];
+      return '<div class="qed ' + pos + '"><label>' + labels[i] + '</label>' +
+        '<input value="' + esc(p[pos]) + '" oninput="updQ(\'' + iid + '\',\'' + pos + '\',this.value)" placeholder="' + labels[i] + '"></div>';
+    }).join('') +
+    '</div>' +
+    '<div class="qed-row2">' +
+    '<div class="qed"><label>Physical Key (ph)</label>' +
+    '<input value="' + esc(p.ph||'') + '" oninput="updPh(\'' + iid + '\',\'ph\',this.value)" placeholder="e.g. f, k, ;"></div>' +
+    '<div class="qed"><label>Physical Key + Shift (phShift)</label>' +
+    '<input value="' + esc(p.phShift||'') + '" oninput="updPh(\'' + iid + '\',\'phShift\',this.value)" placeholder="e.g. F, K, :"></div>' +
+    '</div>' +
+    '<div class="ehint">Physical key bindings connect canvas keys to your keyboard for simulation mode.</div>';
+}
+function updQ(iid, pos, val) {
+  placed[iid][pos] = val;
+  const el = document.getElementById('qd-' + iid + '-' + pos);
+  if (el) el.textContent = disp(val);
+  autoSave();
+}
+function updPh(iid, field, val) {
+  placed[iid][field] = val;
+  const p = placed[iid];
+  if (st.sel === iid) document.getElementById('ed-title').textContent = 'Editing: ' + (p.lb || p.charId) + ' (physical: ' + (p.ph || '?') + ')';
+  autoSave();
+}
+
+// ═══════════════════════════════════════════════════════
+// TYPING
+// ═══════════════════════════════════════════════════════
+function typeChar(ch) {
+  const ta = document.getElementById('output');
+  const p = ta.selectionStart;
+  ta.value = ta.value.slice(0, p) + ch + ta.value.slice(p);
+  ta.selectionStart = ta.selectionEnd = p + ch.length;
+  ta.focus();
+}
+function doBackspace() {
+  const ta = document.getElementById('output');
+  const p = ta.selectionStart;
+  if (p > 0) { ta.value = ta.value.slice(0,p-1) + ta.value.slice(p); ta.selectionStart = ta.selectionEnd = p-1; }
+}
+
+// ═══════════════════════════════════════════════════════
+// CAPS LOCK
+// ═══════════════════════════════════════════════════════
+function updateCapsLockState(e) {
+  if (e && e.getModifierState) st.caps = e.getModifierState('CapsLock');
+  const pill = document.getElementById('pill-ca');
+  pill.className = 'pill' + (st.caps ? ' capson' : '');
+  const stateText = document.getElementById('caps-state-text');
+  if (stateText) {
+    stateText.textContent = st.caps ? 'ON — English' : 'OFF — Malayalam';
+    stateText.style.color = st.caps ? '#2e7d32' : 'var(--text2)';
+  }
+  const btn = document.getElementById('btn-ca');
+  if (btn) btn.className = 'ctrl-btn' + (st.caps ? ' caps-on' : '');
+  updateModVisual();
+}
+
+// ═══════════════════════════════════════════════════════
+// MODIFIERS
+// ═══════════════════════════════════════════════════════
+function toggleMod(mod) {
+  if (mod === 'shift') st.shift = !st.shift;
+  if (mod === 'symbl') { st.symbl = !st.symbl; if (!st.symbl) st.sticky = false; }
+  if (mod === 'caps') st.caps = !st.caps;
+  updateUI();
+}
+function toggleSticky() { st.sticky = !st.sticky; st.symbl = st.sticky; updateUI(); }
+
+function updateUI() {
+  document.getElementById('pill-sh').className = 'pill' + (st.shift ? ' on' : '');
+  const py = document.getElementById('pill-sy');
+  py.className = 'pill' + (st.symbl ? ' son' : '');
+  py.textContent = st.sticky ? 'SYMBL★' : 'SYMBL';
+  updateCapsLockState();
+
+  const bs = document.getElementById('btn-sh');
+  const by = document.getElementById('btn-sy');
+  const shVal = document.getElementById('sh-val');
+  const syVal = document.getElementById('sy-val');
+  if (bs) bs.className = 'ctrl-btn' + (st.shift ? ' mod-on' : '');
+  if (by) by.className = 'ctrl-btn' + (st.symbl ? ' mod-on' : '');
+  if (shVal) shVal.textContent = st.shift ? 'ON' : 'OFF';
+  if (syVal) syVal.textContent = st.symbl ? (st.sticky ? 'STICKY' : 'ON') : 'OFF';
+  updateModVisual();
+}
+function updateModVisual() {
+  Object.entries(placed).forEach(([iid, p]) => {
+    if (!p.isMod) return;
+    const el = document.getElementById('mk-' + iid);
+    if (!el) return;
+    const on = ((p.modId==='lsh'||p.modId==='rsh') && st.shift) ||
+               ((p.modId==='lsy'||p.modId==='rsy') && st.symbl) ||
+               (p.modId==='caps' && st.caps);
+    el.classList.toggle('active-mod', on);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// SIMULATION ENGINE  (unchanged)
+// ═══════════════════════════════════════════════════════
+function toggleSimBtn() {
+  simActive = !simActive;
+  const btn = document.getElementById('sim-toggle');
+  const lbl = document.getElementById('sim-lbl');
+  btn.classList.toggle('active', simActive);
+  lbl.textContent = simActive ? 'ON' : 'OFF';
+  document.getElementById('output').classList.toggle('sim-active', simActive);
+  if (simActive) document.getElementById('output').focus();
+}
+function setSymblKey(val) {
+  symblKey = val;
+  try { localStorage.setItem('ml_symblkey', val); } catch(e) {}
+}
+function buildSimMap() {
+  const map = {};
+  Object.entries(placed).forEach(([iid, p]) => { if (p.isMod || p.isSpace) return; if (p.ph) map[p.ph] = iid; });
+  return map;
+}
+function physToChar(code) {
+  if (code.startsWith('Key')) return code.slice(3).toLowerCase();
+  const nums = {Digit1:'1',Digit2:'2',Digit3:'3',Digit4:'4',Digit5:'5',Digit6:'6',Digit7:'7',Digit8:'8',Digit9:'9',Digit0:'0'};
+  if (nums[code]) return nums[code];
+  const punc = {Backquote:'`',Minus:'-',Equal:'=',BracketLeft:'[',BracketRight:']',Backslash:'\\',Semicolon:';',Quote:"'",Comma:',',Period:'.',Slash:'/'};
+  return punc[code] || null;
+}
+function flashKey(iid) {
+  const el = document.getElementById('ck-' + iid);
+  if (!el) return;
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 120);
+}
+function handleKeyDown(e) {
+  if (!simActive) return;
+  updateCapsLockState(e);
+  const ta = document.getElementById('output');
+  const capsActive = st.caps;
+  if (e.code === symblKey) { symblHeld = true; if (!capsActive) { st.symbl = true; } updateUI(); e.preventDefault(); return; }
+  if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') { st.shift = true; updateUI(); return; }
+  if (e.code === 'CapsLock') { st.caps = !st.caps; updateCapsLockState(); e.preventDefault(); return; }
+  if (e.code === 'Backspace') { e.preventDefault(); ta.focus(); doBackspace(); return; }
+  if (e.code === 'Enter') { e.preventDefault(); ta.focus(); typeChar('\n'); return; }
+  if (e.code === 'Space') { if (symblHeld && !capsActive) { e.preventDefault(); typeChar(' '); return; } return; }
+  const physChar = physToChar(e.code);
+  if (!physChar) return;
+  if (capsActive) {
+    const engKey = ENGLISH_MAP[physChar];
+    if (engKey) { e.preventDefault(); ta.focus(); typeChar(e.shiftKey ? engKey.shift : engKey.base); return; }
+    const lm = e.code.match(/^Key([A-Z])$/);
+    if (lm) { e.preventDefault(); ta.focus(); typeChar(e.shiftKey ? lm[1] : lm[1].toLowerCase()); return; }
+    return;
+  }
+  const simMap = buildSimMap();
+  const iid = simMap[physChar];
+  if (symblHeld) {
+    e.preventDefault(); if (!iid) return;
+    const p = placed[iid]; const ch = e.shiftKey ? p.tl : p.bl;
+    if (ch) { ta.focus(); typeChar(ch); } flashKey(iid); return;
+  }
+  if (!iid) return;
+  e.preventDefault();
+  const p = placed[iid]; const ch = e.shiftKey ? p.tr : p.br;
+  if (ch) { ta.focus(); typeChar(ch); } flashKey(iid);
+}
+function handleKeyUp(e) {
+  if (!simActive) return;
+  updateCapsLockState(e);
+  if (e.code === symblKey) { symblHeld = false; if (!st.sticky) { st.symbl = false; } updateUI(); }
+  if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') { if (!st.sticky) { st.shift = false; updateUI(); } }
+}
+
+// ═══════════════════════════════════════════════════════
+// SAVE / LOAD / RESET / CLEAR / COPY MAP
+// ═══════════════════════════════════════════════════════
+function getJSON() { return JSON.stringify({uid, rows, placed}, null, 2); }
+
+function applyJSON(json) {
+  try {
+    const d = JSON.parse(json);
+    for (let r = 0; r < 5; r++) rows[r] = [];
+    Object.keys(placed).forEach(k => delete placed[k]);
+    uid = d.uid || 0;
+    d.rows.forEach((r, i) => { rows[i] = r; });
+    Object.entries(d.placed).forEach(([k, v]) => {
+      if ((!v.ph && !v.phShift) && !v.isMod && !v.isSpace) {
+        const def = CHAR_KEYS.find(ck => ck.id === v.charId);
+        v.ph = def ? (def.ph || '') : (v.bl || '');
+        v.phShift = def ? (def.phShift || '') : (v.tl || '');
+      }
+      placed[k] = v;
+    });
+    for (let r = 0; r < 5; r++) renderRow(r);
+    updateUI();
+    document.getElementById('ed-title').textContent = 'Key Editor';
+    document.getElementById('ed-body').innerHTML = '<div class="editor-empty">Place a character key on the canvas above, then click it to edit its layers</div>';
+    return true;
+  } catch(e) { alert('Invalid layout file.'); return false; }
+}
+
+function autoSave() { try { localStorage.setItem('ml_kb_layout', getJSON()); } catch(e) {} }
+
+// ── Save: download current canvas as JSON ──────────────
+function saveLayout() {
+  const blob = new Blob([getJSON()], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'granthom_rasavan_layout.json'; a.click(); URL.revokeObjectURL(a.href);
+}
+
+// ── Load: upload a saved JSON and restore ──────────────
+function loadLayout(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { if (applyJSON(e.target.result)) autoSave(); };
+  reader.readAsText(file); event.target.value = '';
+}
+
+// ── Reset: fetch default layout JSON from repo ─────────
+async function resetToDefault() {
+  const hasLocal = (() => { try { return !!localStorage.getItem('ml_kb_layout'); } catch(e) { return false; } })();
+  if (hasLocal) {
+    if (!confirm('Reset to the default Granthom Rasavan v1.2 layout?\nYour current layout will be replaced.')) return;
+  }
+  setLoading(true, 'Loading default layout…');
+  try {
+    // Try relative path first (works on GitHub Pages and local server)
+    // Falls back to raw GitHub URL if served from a different path
+    const urls = [
+      '../layout/granthom_rasavan_v1.2.json',
+      './granthom_rasavan_v1.2.json',
+      'https://raw.githubusercontent.com/KSJeshin/granthom-rasavan/main/layout/granthom_rasavan_v1.2.json',
+    ];
+    let json = null;
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) { json = await res.text(); break; }
+      } catch(e) { continue; }
+    }
+    if (json) {
+      if (applyJSON(json)) {
+        try { localStorage.removeItem('ml_kb_layout'); } catch(e) {}
+        showStatus('Default layout loaded');
+      }
+    } else {
+      showStatus('Could not fetch layout — drag keys manually', true);
+    }
+  } catch(e) {
+    showStatus('Could not fetch layout — drag keys manually', true);
+  } finally {
+    setLoading(false);
+  }
+}
+
+// ── Clear: remove all keys from canvas ─────────────────
+function clearLayout() {
+  if (!confirm('Remove all keys from the canvas?')) return;
+  for (let r = 0; r < 5; r++) { rows[r] = []; renderRow(r); }
+  Object.keys(placed).forEach(k => delete placed[k]); uid = 0;
+  try { localStorage.removeItem('ml_kb_layout'); } catch(e) {}
+  document.getElementById('ed-title').textContent = 'Key Editor';
+  document.getElementById('ed-body').innerHTML = '<div class="editor-empty">Place a character key on the canvas above, then click it to edit its layers</div>';
+}
+
+// ── Copy Map: copy formatted Unicode char map ──────────
+function copyMap() {
+  // Build a readable character map: key | Normal | Shift | Symbl | Symbl+Shift
+  const rowNames = ['Number row', 'Top row', 'Home row', 'Bottom row', 'Space row'];
+  let lines = [];
+  lines.push('GRANTHOM RASAVAN — CHARACTER MAP');
+  lines.push('Generated from simulator · Layout v1.2');
+  lines.push('═'.repeat(62));
+  lines.push('Key    Normal    Shift     Symbl     Symbl+Shift');
+  lines.push('─'.repeat(62));
+
+  let hasContent = false;
+  for (let r = 0; r < 5; r++) {
+    if (!rows[r].length) continue;
+    const rowLabel = rowNames[r] || ('Row ' + (r+1));
+    lines.push('');
+    lines.push('[ ' + rowLabel + ' ]');
+    rows[r].forEach(iid => {
+      const p = placed[iid];
+      if (p.isMod)   { lines.push('  [' + p.lb.padEnd(6) + ']'); return; }
+      if (p.isSpace) { lines.push('  [Space]'); return; }
+      const key = (p.lb || '?').padEnd(6);
+      const n  = (p.br || '—').padEnd(9);
+      const sh = (p.tr || '—').padEnd(9);
+      const sy = (p.bl || '—').padEnd(9);
+      const ss = (p.tl || '—');
+      lines.push('  ' + key + ' ' + n + ' ' + sh + ' ' + sy + ' ' + ss);
+      hasContent = true;
+    });
+  }
+
+  if (!hasContent) {
+    showStatus('Canvas is empty — add some keys first', true);
+    return;
+  }
+
+  const text = lines.join('\n');
+
+  // Show in panel
+  const el = document.getElementById('export-out');
+  el.style.display = 'block';
+  el.textContent = text;
+
+  // Copy to clipboard
+  navigator.clipboard.writeText(text).then(() => {
+    showStatus('Character map copied to clipboard ✓');
+    const btn = document.getElementById('btn-copymap');
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied';
+      btn.style.color = 'var(--l-normal-t)';
+      setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 1800);
+    }
+  }).catch(() => {
+    showStatus('Map shown below — select all to copy manually');
+  });
+}
+
+function clearOut() {
+  document.getElementById('output').value = '';
+  document.getElementById('export-out').style.display = 'none';
+}
+
+// ── Loading overlay ────────────────────────────────────
+function setLoading(on, msg) {
+  const ov = document.getElementById('load-overlay');
+  const tx = document.getElementById('load-text');
+  if (msg && tx) tx.textContent = msg;
+  ov.classList.toggle('show', on);
+}
+
+// ── Status toast ───────────────────────────────────────
+let statusTimer = null;
+function showStatus(msg, isError) {
+  let toast = document.getElementById('status-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'status-toast';
+    toast.style.cssText = `
+      position:fixed; bottom:36px; left:50%; transform:translateX(-50%);
+      background:var(--text); color:#fff; font-size:11px; font-family:var(--ui);
+      padding:7px 16px; border-radius:20px; z-index:100;
+      box-shadow:var(--shadow-md); transition:opacity .3s; opacity:0;
+      white-space:nowrap;
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.background = isError ? 'var(--accent)' : 'var(--text)';
+  toast.style.opacity = '1';
+  clearTimeout(statusTimer);
+  statusTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2500);
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════
+function disp(ch) {
+  if (!ch) return '';
+  if (ch === ' ') return '·';
+  if (ch === '\u200D') return 'ZWJ';
+  if (ch === '\u200C') return 'ZWN';
+  return ch;
+}
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+buildPalette();
+buildCharPanel();
+setupRows();
+for (let r = 0; r < 5; r++) renderRow(r);
+updateUI();
+
+// Restore Symbl key preference
+try {
+  const sk = localStorage.getItem('ml_symblkey');
+  if (sk) { symblKey = sk; document.getElementById('symbl-sel').value = sk; }
+} catch(e) {}
+
+// On open: load default layout from repo JSON
+// If user has a saved custom layout in localStorage, offer choice
+(async () => {
+  let hasSaved = false;
+  try { hasSaved = !!localStorage.getItem('ml_kb_layout'); } catch(e) {}
+
+  if (hasSaved) {
+    // Restore saved layout silently — user was in the middle of something
+    try {
+      const saved = localStorage.getItem('ml_kb_layout');
+      if (saved) applyJSON(saved);
+    } catch(e) {}
+    // Offer reset to default via Reset button — no interruption
+    showStatus('Restored your saved layout · Use ↺ Reset to load default');
+    return;
+  }
+
+  // No saved layout — fetch and load the default
+  setLoading(true, 'Loading default layout…');
+  try {
+    const urls = [
+      '../layout/granthom_rasavan_v1.2.json',
+      './granthom_rasavan_v1.2.json',
+      'https://raw.githubusercontent.com/KSJeshin/granthom-rasavan/main/layout/granthom_rasavan_v1.2.json',
+    ];
+    let json = null;
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) { json = await res.text(); break; }
+      } catch(e) { continue; }
+    }
+    if (json) {
+      applyJSON(json);
+      showStatus('Default layout loaded · Drag to rearrange, click to type');
+    } else {
+      showStatus('Drag keys from the Palette onto the rows to build your layout');
+    }
+  } catch(e) {
+    showStatus('Drag keys from the Palette onto the rows to build your layout');
+  } finally {
+    setLoading(false);
+  }
+})();
+
+document.addEventListener('keydown', handleKeyDown);
+document.addEventListener('keyup', handleKeyUp);
+</script>
 </body>
 </html>
