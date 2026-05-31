@@ -18,18 +18,16 @@
   --text2:    #6b6560;
   --text3:    #9e9890;
 
-  --accent:   #c0392b;        /* deep red — ink/script tone */
+  --accent:   #c0392b;
   --accent-s: #f5e8e6;
   --gold:     #a0722a;
   --gold-s:   #fdf3dc;
 
-  /* layer colours — warm, readable */
   --l-normal:  #eaf3ea;  --l-normal-t:  #1a5c2a;
   --l-shift:   #e8f0fb;  --l-shift-t:   #1a4070;
   --l-symbl:   #fdf3dc;  --l-symbl-t:   #7a4a00;
   --l-ss:      #fde8e8;  --l-ss-t:      #6a2020;
 
-  /* key surfaces */
   --key-bg:    #f9f7f4;
   --key-bdr:   #ddd8d0;
   --mod-bg:    #f0ede8;
@@ -44,6 +42,61 @@
   --ui: 'DM Sans', sans-serif;
   --mono: 'DM Mono', monospace;
 }
+
+/* ── DARK THEME ───────────────────────────────────────── */
+html.dark {
+  --bg:       #141210;
+  --surface:  #1e1b18;
+  --surface2: #252119;
+  --border:   #333028;
+  --border2:  #4a4438;
+
+  --text:     #e8e4dc;
+  --text2:    #9e9688;
+  --text3:    #665e52;
+
+  --accent:   #e05545;
+  --accent-s: #2a1410;
+  --gold:     #c49a40;
+  --gold-s:   #2a2010;
+
+  --l-normal:  #0e1f10;  --l-normal-t:  #6abf7a;
+  --l-shift:   #0e1525;  --l-shift-t:   #6aa0d8;
+  --l-symbl:   #1f1800;  --l-symbl-t:   #c9a050;
+  --l-ss:      #1f0e0e;  --l-ss-t:      #c07070;
+
+  --key-bg:    #1a1714;
+  --key-bdr:   #38332a;
+  --mod-bg:    #222018;
+  --mod-bdr:   #3a3528;
+
+  --shadow:    0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.4);
+}
+
+/* smooth theme transition — body level only, keeps drag/drop fast */
+body, header, footer, .lpanel, .rpanel, .legend,
+.kb-canvas, .editor, .testarea, textarea, .export-out {
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+
+/* ── THEME TOGGLE BUTTON ──────────────────────────────── */
+.theme-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  transition: border-color .15s, background .15s;
+}
+.theme-btn:hover { border-color: var(--gold); background: var(--gold-s); }
 
 /* ── RESET ────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -383,19 +436,27 @@ header {
   background: var(--bg);
 }
 
+/* ── UPPER ZONE: canvas + editor side by side ─────────── */
+.kb-upper {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
 /* ── KEYBOARD CANVAS ──────────────────────────────────── */
 .kb-canvas {
   background: var(--surface);
-  padding: 12px 14px 10px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  box-shadow: var(--shadow);
+  padding: 10px 12px 8px;
+  border-right: 1px solid var(--border);
+  overflow: hidden;
 }
 .kb-row {
   display: flex;
   gap: 3px;
   margin-bottom: 3px;
-  height: 58px;
+  height: 50px;
   background: var(--surface2);
   border: 1px dashed var(--border2);
   border-radius: var(--radius);
@@ -538,16 +599,17 @@ header {
 /* ── EDITOR ───────────────────────────────────────────── */
 .editor {
   background: var(--surface);
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  min-height: 148px;
+  padding: 10px 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 .editor-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 .editor-header h3 {
   font-size: 10px;
@@ -561,13 +623,15 @@ header {
   font-size: 11px;
   font-style: italic;
   text-align: center;
-  padding: 20px 0;
+  padding: 16px 4px;
+  line-height: 1.6;
 }
+/* stack quadrant editors 2×2 in narrow column */
 .qeds {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 8px;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 6px;
 }
 .qed label {
   font-size: 9px;
@@ -583,9 +647,9 @@ header {
 .qed.br label { color: var(--l-normal-t); }
 .qed input {
   font-family: var(--ml);
-  font-size: 16px;
+  font-size: 15px;
   width: 100%;
-  padding: 4px 6px;
+  padding: 4px 5px;
   background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -595,10 +659,10 @@ header {
   transition: border-color .15s;
 }
 .qed input:focus { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 2px var(--accent-s); }
-.qed-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.qed-row2 { display: grid; grid-template-columns: 1fr; gap: 6px; }
 .qed-row2 .qed label { color: var(--text2); }
-.qed-row2 .qed input { font-family: var(--mono); font-size: 13px; }
-.ehint { font-size: 10px; color: var(--text3); margin-top: 5px; font-style: italic; }
+.qed-row2 .qed input { font-family: var(--mono); font-size: 12px; }
+.ehint { font-size: 9px; color: var(--text3); margin-top: 4px; font-style: italic; line-height: 1.5; }
 
 /* ── TEST AREA ────────────────────────────────────────── */
 .testarea {
@@ -837,10 +901,9 @@ footer a:hover { color: var(--accent); }
   <span class="version-badge">v1.2</span>
   <span class="header-hint">Drag keys onto rows · Click to type · Enable Simulate to use physical keyboard</span>
   <div class="hbtns">
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle dark / light mode">☀️</button>
     <button class="btn btn-secondary" onclick="saveLayout()" title="Download current layout as JSON">⬇ Save</button>
     <label class="btn btn-secondary" style="cursor:pointer;" title="Upload a previously saved layout JSON">⬆ Load<input type="file" accept=".json" onchange="loadLayout(event)" style="display:none;"></label>
-    <button class="btn btn-secondary" onclick="resetToDefault()" title="Reload the default Granthom Rasavan v1.2 layout">↺ Reset</button>
-    <button class="btn btn-secondary" onclick="copyMap()" id="btn-copymap" title="Copy Unicode character map to clipboard">📋 Copy Map</button>
     <button class="btn btn-secondary" onclick="clearLayout()" title="Remove all keys from canvas">✕ Clear</button>
   </div>
 </header>
@@ -919,24 +982,29 @@ footer a:hover { color: var(--accent); }
   <!-- RIGHT PANEL -->
   <div class="rpanel">
 
-    <!-- Keyboard canvas -->
-    <div class="kb-canvas">
-      <div id="row0" class="kb-row" data-row="0"></div>
-      <div id="row1" class="kb-row" data-row="1"></div>
-      <div id="row2" class="kb-row" data-row="2"></div>
-      <div id="row3" class="kb-row" data-row="3"></div>
-      <div id="row4" class="kb-row" data-row="4"></div>
-    </div>
+    <!-- Upper zone: keyboard canvas + key editor side by side -->
+    <div class="kb-upper">
 
-    <!-- Key editor -->
-    <div class="editor">
-      <div class="editor-header">
-        <h3 id="ed-title">Key Editor</h3>
+      <!-- Keyboard canvas -->
+      <div class="kb-canvas">
+        <div id="row0" class="kb-row" data-row="0"></div>
+        <div id="row1" class="kb-row" data-row="1"></div>
+        <div id="row2" class="kb-row" data-row="2"></div>
+        <div id="row3" class="kb-row" data-row="3"></div>
+        <div id="row4" class="kb-row" data-row="4"></div>
       </div>
-      <div id="ed-body">
-        <div class="editor-empty">Place a character key on the canvas above, then click it to edit its layers</div>
+
+      <!-- Key editor — right column -->
+      <div class="editor">
+        <div class="editor-header">
+          <h3 id="ed-title">Key Editor</h3>
+        </div>
+        <div id="ed-body">
+          <div class="editor-empty">Click a placed key to edit its four layers</div>
+        </div>
       </div>
-    </div>
+
+    </div><!-- /kb-upper -->
 
     <!-- Output area -->
     <div class="testarea">
@@ -1558,22 +1626,28 @@ function handleKeyDown(e) {
   if (e.code === 'Space') { if (symblHeld && !capsActive) { e.preventDefault(); typeChar(' '); return; } return; }
   const physChar = physToChar(e.code);
   if (!physChar) return;
+
+  // Prevent browser default for ALL recognised physical keys
+  // regardless of whether they are mapped in the layout.
+  // This stops backtick, quote, slash etc. leaking through
+  // as native characters alongside the Malayalam output.
+  e.preventDefault();
+
   if (capsActive) {
     const engKey = ENGLISH_MAP[physChar];
-    if (engKey) { e.preventDefault(); ta.focus(); typeChar(e.shiftKey ? engKey.shift : engKey.base); return; }
+    if (engKey) { ta.focus(); typeChar(e.shiftKey ? engKey.shift : engKey.base); return; }
     const lm = e.code.match(/^Key([A-Z])$/);
-    if (lm) { e.preventDefault(); ta.focus(); typeChar(e.shiftKey ? lm[1] : lm[1].toLowerCase()); return; }
+    if (lm) { ta.focus(); typeChar(e.shiftKey ? lm[1] : lm[1].toLowerCase()); return; }
     return;
   }
   const simMap = buildSimMap();
   const iid = simMap[physChar];
   if (symblHeld) {
-    e.preventDefault(); if (!iid) return;
+    if (!iid) return;
     const p = placed[iid]; const ch = e.shiftKey ? p.tl : p.bl;
     if (ch) { ta.focus(); typeChar(ch); } flashKey(iid); return;
   }
   if (!iid) return;
-  e.preventDefault();
   const p = placed[iid]; const ch = e.shiftKey ? p.tr : p.br;
   if (ch) { ta.focus(); typeChar(ch); } flashKey(iid);
 }
@@ -1783,6 +1857,15 @@ function disp(ch) {
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
 
 // ═══════════════════════════════════════════════════════
+// THEME TOGGLE
+// ═══════════════════════════════════════════════════════
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  document.getElementById('theme-btn').textContent = isDark ? '🌙' : '☀️';
+  try { localStorage.setItem('ml_theme', isDark ? 'dark' : 'light'); } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
 buildPalette();
@@ -1795,6 +1878,14 @@ updateUI();
 try {
   const sk = localStorage.getItem('ml_symblkey');
   if (sk) { symblKey = sk; document.getElementById('symbl-sel').value = sk; }
+} catch(e) {}
+
+// Restore theme preference
+try {
+  if (localStorage.getItem('ml_theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('theme-btn').textContent = '🌙';
+  }
 } catch(e) {}
 
 // On open: load default layout from repo JSON

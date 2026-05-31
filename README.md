@@ -103,6 +103,21 @@ AltGr + V  →  ർ   (ra-chillu, second most frequent)
 
 ---
 
+## Live Simulator
+
+Try the layout in your browser — no installation needed:
+
+**[▶ Open Simulator](https://ksjeshin.github.io/granthom-rasavan/)**
+
+- For custom layout, drag keys from the palette onto the keyboard rows to 
+- Click any placed key to type that character
+- Enable **Physical keyboard** toggle to type using your actual keyboard
+- Click a placed key to edit its four layers (Normal / Shift / Symbl / Symbl+Shift)
+- **Caps Lock** switches to full English QWERTY and back
+- Save and load layouts as JSON to local system
+
+---
+
 ## Project Status
 
 | Component | Status |

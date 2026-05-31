@@ -376,7 +376,7 @@
     },
     "m35": {
       "modId": "caps",
-      "lb": "Caps/ZWNJ",
+      "lb": "Caps",
       "isMod": true,
       "width": 91
     },
