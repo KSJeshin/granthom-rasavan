@@ -1,0 +1,700 @@
+{
+  "uid": 76,
+  "rows": [
+    [
+      "k0",
+      "k1",
+      "k2",
+      "k3",
+      "k4",
+      "k6",
+      "k7",
+      "k8",
+      "k9",
+      "k10",
+      "k11",
+      "k12",
+      "k13",
+      "m15"
+    ],
+    [
+      "m34",
+      "k18",
+      "k19",
+      "k20",
+      "k21",
+      "k22",
+      "k25",
+      "k26",
+      "k27",
+      "k28",
+      "k29",
+      "k30",
+      "k31",
+      "k32"
+    ],
+    [
+      "m35",
+      "k36",
+      "k37",
+      "k38",
+      "k39",
+      "k40",
+      "k42",
+      "k43",
+      "k44",
+      "k45",
+      "k46",
+      "k47",
+      "m48"
+    ],
+    [
+      "m49",
+      "k50",
+      "k51",
+      "k52",
+      "k53",
+      "k54",
+      "k75",
+      "k57",
+      "k58",
+      "k59",
+      "k60",
+      "m62"
+    ],
+    [
+      "m63",
+      "m64",
+      "m65",
+      "m66",
+      "m68",
+      "k67",
+      "m72",
+      "m70",
+      "m71",
+      "m73"
+    ]
+  ],
+  "placed": {
+    "k0": {
+      "charId": "r0g",
+      "lb": "`",
+      "extra": false,
+      "br": "ഛ",
+      "tr": "ഛ്",
+      "bl": "ഝ",
+      "tl": "ഝ്",
+      "ph": "`",
+      "phShift": "~"
+    },
+    "k1": {
+      "charId": "r01",
+      "lb": "1",
+      "extra": false,
+      "br": "ൃ",
+      "tr": "ഋ",
+      "bl": "൧",
+      "tl": "!",
+      "ph": "1",
+      "phShift": "!"
+    },
+    "k2": {
+      "charId": "r02",
+      "lb": "2",
+      "extra": false,
+      "br": "ഴ",
+      "tr": "ഴ്",
+      "bl": "൨",
+      "tl": "@",
+      "ph": "2",
+      "phShift": "@"
+    },
+    "k3": {
+      "charId": "r03",
+      "lb": "3",
+      "extra": false,
+      "br": "ഭ",
+      "tr": "ഭ്",
+      "bl": "൩",
+      "tl": "#",
+      "ph": "3",
+      "phShift": "#"
+    },
+    "k4": {
+      "charId": "r04",
+      "lb": "4",
+      "extra": false,
+      "br": "ൊ",
+      "tr": "ഒ",
+      "bl": "൪",
+      "tl": "$",
+      "ph": "4",
+      "phShift": "$"
+    },
+    "k6": {
+      "charId": "r05",
+      "lb": "5",
+      "extra": false,
+      "br": "ധ",
+      "tr": "ധ്",
+      "bl": "൫",
+      "tl": "%",
+      "ph": "5",
+      "phShift": "%"
+    },
+    "k7": {
+      "charId": "r06",
+      "lb": "6",
+      "extra": false,
+      "br": "ഡ",
+      "tr": "ഡ്",
+      "bl": "൬",
+      "tl": "^",
+      "ph": "6",
+      "phShift": "^"
+    },
+    "k8": {
+      "charId": "r07",
+      "lb": "7",
+      "extra": false,
+      "br": "ഹ",
+      "tr": "ഹ്",
+      "bl": "൭",
+      "tl": "&",
+      "ph": "7",
+      "phShift": "&"
+    },
+    "k9": {
+      "charId": "r08",
+      "lb": "8",
+      "extra": false,
+      "br": "ൈ",
+      "tr": "ഐ",
+      "bl": "൮",
+      "tl": "*",
+      "ph": "8",
+      "phShift": "*"
+    },
+    "k10": {
+      "charId": "r09",
+      "lb": "9",
+      "extra": false,
+      "br": "ഖ",
+      "tr": "ഖ്",
+      "bl": "൯",
+      "tl": "(",
+      "ph": "9",
+      "phShift": "("
+    },
+    "k11": {
+      "charId": "r00",
+      "lb": "0",
+      "extra": false,
+      "br": "ൗ",
+      "tr": "ഔ",
+      "bl": "൦",
+      "tl": ")",
+      "ph": "0",
+      "phShift": ")"
+    },
+    "k12": {
+      "charId": "r0-",
+      "lb": "-",
+      "extra": false,
+      "br": "ഘ",
+      "tr": "ഘ്",
+      "bl": "-",
+      "tl": "_",
+      "ph": "-",
+      "phShift": "_"
+    },
+    "k13": {
+      "charId": "r0=",
+      "lb": "=",
+      "extra": false,
+      "br": "ഥ",
+      "tr": "ഥ്",
+      "bl": "=",
+      "tl": "+",
+      "ph": "=",
+      "phShift": "+"
+    },
+    "m15": {
+      "modId": "bksp",
+      "lb": "⌫ Backspace",
+      "isMod": true,
+      "width": 70
+    },
+    "k18": {
+      "charId": "r1q",
+      "lb": "Q",
+      "extra": false,
+      "br": "ജ",
+      "tr": "ജ്",
+      "bl": "",
+      "tl": "Q",
+      "ph": "q",
+      "phShift": "Q"
+    },
+    "k19": {
+      "charId": "r1w",
+      "lb": "W",
+      "extra": false,
+      "br": "ശ",
+      "tr": "ശ്",
+      "bl": "w",
+      "tl": "W",
+      "ph": "w",
+      "phShift": "W"
+    },
+    "k20": {
+      "charId": "r1e",
+      "lb": "E",
+      "extra": false,
+      "br": "ദ",
+      "tr": "ദ്",
+      "bl": "e",
+      "tl": "E",
+      "ph": "e",
+      "phShift": "E"
+    },
+    "k21": {
+      "charId": "r1r",
+      "lb": "R",
+      "extra": false,
+      "br": "ള",
+      "tr": "ള്",
+      "bl": "ൾ",
+      "tl": "R",
+      "ph": "r",
+      "phShift": "R"
+    },
+    "k22": {
+      "charId": "r1t",
+      "lb": "T",
+      "extra": false,
+      "br": "ോ",
+      "tr": "ഓ",
+      "bl": "t",
+      "tl": "T",
+      "ph": "t",
+      "phShift": "T"
+    },
+    "k25": {
+      "charId": "r1y",
+      "lb": "Y",
+      "extra": false,
+      "br": "േ",
+      "tr": "ഏ",
+      "bl": "",
+      "tl": "Y",
+      "ph": "y",
+      "phShift": "Y"
+    },
+    "k26": {
+      "charId": "r1u",
+      "lb": "U",
+      "extra": false,
+      "br": "സ",
+      "tr": "സ്",
+      "bl": "u",
+      "tl": "U",
+      "ph": "u",
+      "phShift": "U"
+    },
+    "k27": {
+      "charId": "r1i",
+      "lb": "I",
+      "extra": false,
+      "br": "ങ",
+      "tr": "ങ്",
+      "bl": "i",
+      "tl": "I",
+      "ph": "i",
+      "phShift": "I"
+    },
+    "k28": {
+      "charId": "r1o",
+      "lb": "O",
+      "extra": false,
+      "br": "ഷ",
+      "tr": "ഷ്",
+      "bl": "o",
+      "tl": "O",
+      "ph": "o",
+      "phShift": "O"
+    },
+    "k29": {
+      "charId": "r1p",
+      "lb": "P",
+      "extra": false,
+      "br": "ൂ",
+      "tr": "ഊ",
+      "bl": "p",
+      "tl": "P",
+      "ph": "p",
+      "phShift": "P"
+    },
+    "k30": {
+      "charId": "r1[",
+      "lb": "[",
+      "extra": false,
+      "br": "ഞ",
+      "tr": "ഞ്",
+      "bl": "[",
+      "tl": "{",
+      "ph": "[",
+      "phShift": "{"
+    },
+    "k31": {
+      "charId": "r1]",
+      "lb": "]",
+      "extra": false,
+      "br": "ഫ",
+      "tr": "ഫ്",
+      "bl": "]",
+      "tl": "}",
+      "ph": "]",
+      "phShift": "}"
+    },
+    "k32": {
+      "charId": "r1\\",
+      "lb": "\\",
+      "extra": false,
+      "br": "ഠ",
+      "tr": "ഠ്",
+      "bl": "ഢ",
+      "tl": "ഢ്",
+      "ph": "\\",
+      "phShift": "|"
+    },
+    "m34": {
+      "modId": "tab",
+      "lb": "Tab",
+      "isMod": true,
+      "width": 70
+    },
+    "m35": {
+      "modId": "caps",
+      "lb": "Caps/ZWNJ",
+      "isMod": true,
+      "width": 91
+    },
+    "k36": {
+      "charId": "r2a",
+      "lb": "A",
+      "extra": false,
+      "br": "െ",
+      "tr": "എ",
+      "bl": "",
+      "tl": "A",
+      "ph": "a",
+      "phShift": "A"
+    },
+    "k37": {
+      "charId": "r2s",
+      "lb": "S",
+      "extra": false,
+      "br": "ാ",
+      "tr": "ആ",
+      "bl": "",
+      "tl": "S",
+      "ph": "s",
+      "phShift": "S"
+    },
+    "k38": {
+      "charId": "r2d",
+      "lb": "D",
+      "extra": false,
+      "br": "ക",
+      "tr": "ക്",
+      "bl": "ൿ",
+      "tl": "D",
+      "ph": "d",
+      "phShift": "D"
+    },
+    "k39": {
+      "charId": "r2f",
+      "lb": "F",
+      "extra": false,
+      "br": "ന",
+      "tr": "ന്",
+      "bl": "ൻ",
+      "tl": "F",
+      "ph": "f",
+      "phShift": "F"
+    },
+    "k40": {
+      "charId": "r2g",
+      "lb": "G",
+      "extra": false,
+      "br": "ല",
+      "tr": "ല്",
+      "bl": "ൽ",
+      "tl": "G",
+      "ph": "g",
+      "phShift": "G"
+    },
+    "k42": {
+      "charId": "r2h",
+      "lb": "H",
+      "extra": false,
+      "br": "ം",
+      "tr": "അ",
+      "bl": "ഃ",
+      "tl": "H",
+      "ph": "h",
+      "phShift": "H"
+    },
+    "k43": {
+      "charId": "r2j",
+      "lb": "J",
+      "extra": false,
+      "br": "ി",
+      "tr": "ഇ",
+      "bl": "j",
+      "tl": "J",
+      "ph": "j",
+      "phShift": "J"
+    },
+    "k44": {
+      "charId": "r2k",
+      "lb": "K",
+      "extra": false,
+      "br": "ു",
+      "tr": "ഉ",
+      "bl": "k",
+      "tl": "K",
+      "ph": "k",
+      "phShift": "K"
+    },
+    "k45": {
+      "charId": "r2l",
+      "lb": "L",
+      "extra": false,
+      "br": "ത",
+      "tr": "ത്",
+      "bl": "l",
+      "tl": "L",
+      "ph": "l",
+      "phShift": "L"
+    },
+    "k46": {
+      "charId": "r2;",
+      "lb": ";",
+      "extra": false,
+      "br": "പ",
+      "tr": "പ്",
+      "bl": ";",
+      "tl": ":",
+      "ph": ";",
+      "phShift": ":"
+    },
+    "k47": {
+      "charId": "r2'",
+      "lb": "'",
+      "extra": false,
+      "br": "ബ",
+      "tr": "ബ്",
+      "bl": "'",
+      "tl": "\"",
+      "ph": "'",
+      "phShift": "\""
+    },
+    "m48": {
+      "modId": "enter",
+      "lb": "Enter ↵",
+      "isMod": true,
+      "width": 70
+    },
+    "m49": {
+      "modId": "rsh",
+      "lb": "⇧ Shift",
+      "isMod": true,
+      "width": 113
+    },
+    "k50": {
+      "charId": "r3z",
+      "lb": "Z",
+      "extra": false,
+      "br": "ീ",
+      "tr": "ഈ",
+      "bl": "",
+      "tl": "Z",
+      "ph": "z",
+      "phShift": "Z"
+    },
+    "k51": {
+      "charId": "r3x",
+      "lb": "X",
+      "extra": false,
+      "br": "ണ",
+      "tr": "ണ്",
+      "bl": "ൺ",
+      "tl": "X",
+      "ph": "x",
+      "phShift": "X"
+    },
+    "k52": {
+      "charId": "r3c",
+      "lb": "C",
+      "extra": false,
+      "br": "റ",
+      "tr": "റ്",
+      "bl": "c",
+      "tl": "C",
+      "ph": "c",
+      "phShift": "C"
+    },
+    "k53": {
+      "charId": "r3v",
+      "lb": "V",
+      "extra": false,
+      "br": "ര",
+      "tr": "ര്",
+      "bl": "ർ",
+      "tl": "V",
+      "ph": "v",
+      "phShift": "V"
+    },
+    "k54": {
+      "charId": "r3b",
+      "lb": "B",
+      "extra": false,
+      "br": "മ",
+      "tr": "മ്",
+      "bl": "b",
+      "tl": "B",
+      "ph": "b",
+      "phShift": "B"
+    },
+    "k57": {
+      "charId": "r3m",
+      "lb": "M",
+      "extra": false,
+      "br": "ട",
+      "tr": "ട്",
+      "bl": "m",
+      "tl": "M",
+      "ph": "m",
+      "phShift": "M"
+    },
+    "k58": {
+      "charId": "r3,",
+      "lb": ",",
+      "extra": false,
+      "br": "വ",
+      "tr": "വ്",
+      "bl": ",",
+      "tl": "<",
+      "ph": ",",
+      "phShift": "<"
+    },
+    "k59": {
+      "charId": "r3.",
+      "lb": ".",
+      "extra": false,
+      "br": "ച",
+      "tr": "ച്",
+      "bl": ".",
+      "tl": ">",
+      "ph": ".",
+      "phShift": ">"
+    },
+    "k60": {
+      "charId": "r3/",
+      "lb": "/",
+      "extra": false,
+      "br": "ഗ",
+      "tr": "ഗ്",
+      "bl": "/",
+      "tl": "?",
+      "ph": "/",
+      "phShift": "?"
+    },
+    "m62": {
+      "modId": "lsh",
+      "lb": "⇧ Shift",
+      "isMod": true,
+      "width": 70
+    },
+    "m63": {
+      "modId": "lct",
+      "lb": "Ctrl",
+      "isMod": true,
+      "width": 52
+    },
+    "m64": {
+      "modId": "menu",
+      "lb": "Menu",
+      "isMod": true,
+      "width": 43
+    },
+    "m65": {
+      "modId": "opr",
+      "lb": "Opr.Sys",
+      "isMod": true,
+      "width": 52
+    },
+    "m66": {
+      "modId": "lalt",
+      "lb": "Alt",
+      "isMod": true,
+      "width": 54
+    },
+    "k67": {
+      "charId": "sp",
+      "lb": "Space",
+      "extra": false,
+      "br": " ",
+      "tr": " ",
+      "bl": " ",
+      "tl": " ",
+      "width": 264,
+      "ph": " ",
+      "phShift": " "
+    },
+    "m68": {
+      "modId": "lsy",
+      "lb": "Symbl",
+      "isMod": true,
+      "width": 40
+    },
+    "m70": {
+      "modId": "ralt",
+      "lb": "Alt",
+      "isMod": true,
+      "width": 52
+    },
+    "m71": {
+      "modId": "menu",
+      "lb": "Menu",
+      "isMod": true,
+      "width": 52
+    },
+    "m72": {
+      "modId": "rsy",
+      "lb": "Symbl",
+      "isMod": true,
+      "width": 50
+    },
+    "m73": {
+      "modId": "rct",
+      "lb": "Ctrl",
+      "isMod": true,
+      "width": 70
+    },
+    "k75": {
+      "charId": "r3n",
+      "lb": "N",
+      "extra": false,
+      "isSpace": false,
+      "br": "യ",
+      "tr": "യ്",
+      "bl": "n",
+      "tl": "N",
+      "ph": "n",
+      "phShift": "N"
+    }
+  }
+}

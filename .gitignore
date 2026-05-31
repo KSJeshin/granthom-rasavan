@@ -1,0 +1,31 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# Build outputs
+*.pdf
+dist/
+build/
+
+# Node (if simulator grows)
+node_modules/
+npm-debug.log
+
+# Python (if analysis scripts added)
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Paper submission
+docs/arxiv/
+
+#helper files
+commands.txt
