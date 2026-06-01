@@ -2,8 +2,6 @@
 
 This document explains the ergonomic measurements behind the layout in plain language — what was measured, how, and what the numbers mean.
 
-For the full model documentation see [`docs/arxiv/appendix_c_ergonomic_model.md`](../arxiv/appendix_c_ergonomic_model.md).
-
 ---
 
 ## What Is the Weighted Effort Score?
@@ -43,13 +41,13 @@ Examples:
 | Layout | WES | Notes |
 |--------|-----|-------|
 | Theoretical minimum | 1.000 | Home row only |
-| Granthom Rasavan v1.2 | **1.93** | Current layout |
-| Granthom Rasavan v3.0 | **1.81** | Optimised target — pending testing |
+| Granthom Layout v1.2 | **1.93** | Current layout |
+| Granthom Layout v3.0 | **1.81** | Optimised target — pending testing |
 | InScript Malayalam | ~2.20 | Estimated |
 | Colemak (English) | 1.84 | Best Latin layout |
 | QWERTY (English) | ~3.00 | Baseline |
 
-Granthom Rasavan v1.2 scores 1.93 — 12% easier per keystroke than InScript's estimated 2.20. The v3.0 optimised assignment reaches 1.81 — 18% easier — but needs user testing before being adopted.
+Granthom Layout v1.2 scores 1.93 — 12% easier per keystroke than InScript's estimated 2.20. The v3.0 optimised assignment reaches 1.81 — 18% easier — but needs user testing before being adopted.
 
 ---
 
@@ -66,7 +64,7 @@ This means: for more than half of every keystroke in a typical Malayalam text, y
 | Top | 13.6% | 2.558 |
 | Number | 3.9% | 3.427 |
 
-**Comparison:** InScript Malayalam has approximately 30% home row coverage. Granthom Rasavan's 55.5% is an 85% relative improvement.
+**Comparison:** InScript Malayalam has approximately 30% home row coverage. Granthom Layout's 55.5% is an 85% relative improvement.
 
 **Note on G and H:** These are technically home row positions but require an inward index-finger stretch (effort 2.9 each). They carry the LA group (ല, 3.8%) and A group (ം, 3.7%). If you count only the strict eight home positions (A S D F J K L ;), coverage is 47.3% — still well above InScript.
 

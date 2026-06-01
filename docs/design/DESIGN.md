@@ -1,8 +1,6 @@
-# Granthom Rasavan — Design Rationale
+# Granthom Layout — Design Rationale
 
-This document explains the thinking behind every major design decision in the layout. It is written for contributors, researchers, and anyone who wants to understand why the layout works the way it does — without the academic framing of the arXiv paper.
-
-For the full academic treatment see [`docs/arxiv/paper_main.md`](../arxiv/paper_main.md).
+This document explains the thinking behind every major design decision in the layout. It is written for contributors, researchers, and anyone who wants to understand why the layout works the way it does.
 
 ---
 
@@ -16,7 +14,7 @@ Every Malayalam keyboard in use today was designed around something other than M
 
 None of these start from the question: *what does Malayalam actually need?*
 
-Granthom Rasavan starts there.
+Granthom Rasavan project starts there.
 
 ---
 
@@ -30,13 +28,13 @@ Malayalam is an abugida. The fundamental insight is:
 
 ന (na-base) and ന് (na-virama) are both /na/. The difference is what comes after. A keyboard that puts them on different unrelated keys forces the typist to think in terms of Unicode codepoints rather than sounds.
 
-Granthom Rasavan puts them on the same key — base on Normal, virama-attached on Shift. The typist thinks "na" and presses F. How much of /na/ they need (base, root, or final chillu) is handled by which modifier they hold.
+Granthom Layout puts them on the same key — base on Normal, virama-attached on Shift. The typist thinks "na" and presses F. How much of /na/ they need (base, root, or final chillu) is handled by which modifier they hold.
 
 ### 2. Corpus frequency
 
 112 million Malayalam character occurrences from the SMC corpus tell us which characters appear most in real text. The most frequent characters belong on the easiest keys — the home row, the strong fingers.
 
-The two most frequent Malayalam characters are ി (9.1%) and ന (7.4%). In Granthom Rasavan they sit on J and F — the two strongest home-row positions. In InScript they do not.
+The two most frequent Malayalam characters are ി (9.1%) and ന (7.4%). In Granthom Layout they sit on J and F — the two strongest home-row positions. In InScript they do not.
 
 ---
 
@@ -69,7 +67,7 @@ This was the most consequential design decision.
 
 **Granthom Rasavan approach:** virama is the Shift attribute of the consonant. To type ക്ത, you press Shift+D, then L — two keystrokes. The virama is produced by the Shift action itself.
 
-**Why this matters:** A 23,333-character Malayalam text contains 2,963 virama codepoints. Every single one of those is a free keystroke in Granthom Rasavan — they cost nothing because they are embedded in the Shift action that produces the virama-attached form. This alone accounts for a 9% keystroke reduction.
+**Why this matters:** A 23,333-character Malayalam text contains 2,963 virama codepoints. Every single one of those is a free keystroke in Granthom Layout — they cost nothing because they are embedded in the Shift action that produces the virama-attached form. This alone accounts for a 9% keystroke reduction.
 
 **The deeper reason:** In Malayalam orthography, the virama is a modifier mark *on* the consonant — not a free-standing letter. The keyboard should reflect that. Shift is a modifier action on a key, not a separate keypress. The structure matches.
 
@@ -81,7 +79,7 @@ Malayalam has six dedicated Unicode codepoints for word-final pure consonants (U
 
 InScript accesses chillus via a ZWJ sequence: base + virama + AltGr + Space — four keystrokes per chillu. A text with 509 chillus costs 2,036 keystrokes just for chillus in InScript.
 
-In Granthom Rasavan: AltGr + the consonant key = 2 keystrokes. Same 509 chillus cost 1,018 keystrokes. Saving: 1,018 per typical article.
+In Granthom Layout: AltGr + the consonant key = 2 keystrokes. Same 509 chillus cost 1,018 keystrokes. Saving: 1,018 per typical article.
 
 **Why all five frequent chillus on left-hand keys?**
 Because AltGr is the right thumb. If a chillu is on a right-hand key, the right thumb and right finger must work together — awkward. All five high-frequency chillus (ൻ ർ ൽ ൾ ൺ) are on left-hand keys so the right thumb holds AltGr while a left finger presses the character key — natural and fast.

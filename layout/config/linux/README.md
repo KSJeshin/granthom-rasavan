@@ -1,4 +1,4 @@
-# Granthom Rasavan — Linux Keyboard Configuration (XKB)
+# Granthom Layout — Linux Keyboard Configuration (XKB)
 
 **Status:** Planned — configuration file not yet created
 **Tool:** XKB (X Keyboard Extension) — built into all major Linux desktop environments

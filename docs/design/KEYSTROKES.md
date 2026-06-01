@@ -1,21 +1,19 @@
 # Keystroke Efficiency
 
-This document explains how Granthom Rasavan reduces keystrokes compared to InScript, and what that means in practice.
-
-For the full analysis see [`docs/arxiv/appendix_d_keystroke_analysis.md`](../arxiv/appendix_d_keystroke_analysis.md).
+This document explains how Granthom Layout reduces keystrokes compared to InScript, and what that means in practice.
 
 ---
 
 ## The Bottom Line
 
-Typing the same Malayalam text requires **~10% fewer keystrokes** on Granthom Rasavan than on InScript.
+Typing the same Malayalam text requires **~10% fewer keystrokes** on Granthom Layout than on InScript.
 
 On a real 23,333-character Malayalam newspaper article:
 
 | Layout | Keystrokes | Difference |
 |--------|-----------|------------|
 | InScript | 32,833 | baseline |
-| Granthom Rasavan | ~29,400 | **−3,400 fewer** |
+| Granthom Layout | ~29,400 | **−3,400 fewer** |
 
 That is roughly 3,400 keystrokes saved per article — before accounting for the fact that each of those remaining keystrokes is also ergonomically easier on average.
 
@@ -27,7 +25,7 @@ That is roughly 3,400 keystrokes saved per article — before accounting for the
 
 In InScript, every conjunct consonant requires an explicit virama keypress. The benchmark article had 2,963 virama codepoints — meaning 2,963 extra keystrokes just for viramas.
 
-In Granthom Rasavan, the virama is embedded in the Shift action. Pressing Shift+F produces ന് (na + virama) in one action. Zero separate virama keystrokes.
+In Granthom Layout, the virama is embedded in the Shift action. Pressing Shift+F produces ന് (na + virama) in one action. Zero separate virama keystrokes.
 
 ```
 InScript:   ന  +  ്  +  ത  =  ന്ത   (3 keystrokes)
@@ -38,7 +36,7 @@ Granthom:   Shift+F  +  L  =  ന്ത   (2 keystrokes)
 
 ### 2. Chillus — saves ~1,018 keystrokes per article
 
-The benchmark article had 509 chillus. Each chillu in InScript requires 4 keystrokes (base + virama + AltGr + Space). In Granthom Rasavan, each chillu is 2 keystrokes (AltGr + key).
+The benchmark article had 509 chillus. Each chillu in InScript requires 4 keystrokes (base + virama + AltGr + Space). In Granthom Layout, each chillu is 2 keystrokes (AltGr + key).
 
 ```
 InScript:   ര  +  ്  +  AltGr  +  Space  =  ർ   (4 keystrokes)
@@ -49,11 +47,11 @@ Saving per article: 509 × 2 = 1,018 keystrokes.
 
 ### 3. Independent vowel overhead — adds ~495 keystrokes
 
-This is the one cost. In InScript, independent vowels (ഇ, ഉ, ആ etc.) are on the Normal layer — 1 keypress each. In Granthom Rasavan, matras are on Normal and independent vowels are on Shift — 2 key events each.
+This is the one cost. In InScript, independent vowels (ഇ, ഉ, ആ etc.) are on the Normal layer — 1 keypress each. In Granthom Layout, matras are on Normal and independent vowels are on Shift — 2 key events each.
 
 The benchmark article had 495 independent vowels, adding 495 extra Shift events.
 
-This is the correct tradeoff: matras (Normal) are 10–20× more frequent than independent vowels (Shift). Granthom Rasavan puts the more common form on the easier layer and accepts a minor cost for the less common form.
+This is the correct tradeoff: matras (Normal) are 10–20× more frequent than independent vowels (Shift). Granthom Layout puts the more common form on the easier layer and accepts a minor cost for the less common form.
 
 ### Net
 

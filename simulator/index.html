@@ -1686,7 +1686,12 @@ function applyJSON(json) {
   } catch(e) { alert('Invalid layout file.'); return false; }
 }
 
-function autoSave() { try { localStorage.setItem('ml_kb_layout', getJSON()); } catch(e) {} }
+function autoSave() {
+  try {
+    localStorage.setItem('ml_kb_layout', getJSON());
+    localStorage.setItem('ml_kb_user_modified', '1');
+  } catch(e) {}
+}
 
 // ── Save: download current canvas as JSON ──────────────
 function saveLayout() {
@@ -1727,7 +1732,10 @@ async function resetToDefault() {
     }
     if (json) {
       if (applyJSON(json)) {
-        try { localStorage.removeItem('ml_kb_layout'); } catch(e) {}
+        try {
+          localStorage.removeItem('ml_kb_layout');
+          localStorage.removeItem('ml_kb_user_modified');
+        } catch(e) {}
         showStatus('Default layout loaded');
       }
     } else {
@@ -1745,7 +1753,10 @@ function clearLayout() {
   if (!confirm('Remove all keys from the canvas?')) return;
   for (let r = 0; r < 5; r++) { rows[r] = []; renderRow(r); }
   Object.keys(placed).forEach(k => delete placed[k]); uid = 0;
-  try { localStorage.removeItem('ml_kb_layout'); } catch(e) {}
+  try {
+    localStorage.removeItem('ml_kb_layout');
+    localStorage.removeItem('ml_kb_user_modified');
+  } catch(e) {}
   document.getElementById('ed-title').textContent = 'Key Editor';
   document.getElementById('ed-body').innerHTML = '<div class="editor-empty">Place a character key on the canvas above, then click it to edit its layers</div>';
 }
@@ -1888,30 +1899,29 @@ try {
   }
 } catch(e) {}
 
-// On open: load default layout from repo JSON
-// If user has a saved custom layout in localStorage, offer choice
+// On open: fetch default layout from GitHub unless user has made changes
+// ml_kb_user_modified flag is set by autoSave() and cleared by clearLayout() / resetToDefault()
 (async () => {
-  let hasSaved = false;
-  try { hasSaved = !!localStorage.getItem('ml_kb_layout'); } catch(e) {}
+  let userModified = false;
+  try { userModified = !!localStorage.getItem('ml_kb_user_modified'); } catch(e) {}
 
-  if (hasSaved) {
-    // Restore saved layout silently — user was in the middle of something
+  if (userModified) {
+    // User has made changes — restore their saved layout silently
     try {
       const saved = localStorage.getItem('ml_kb_layout');
       if (saved) applyJSON(saved);
     } catch(e) {}
-    // Offer reset to default via Reset button — no interruption
     showStatus('Restored your saved layout · Use ↺ Reset to load default');
     return;
   }
 
-  // No saved layout — fetch and load the default
+  // No user modifications — always fetch fresh from GitHub
   setLoading(true, 'Loading default layout…');
   try {
     const urls = [
+      'https://raw.githubusercontent.com/KSJeshin/granthom-rasavan/main/layout/granthom_rasavan_v1.2.json',
       '../layout/granthom_rasavan_v1.2.json',
       './granthom_rasavan_v1.2.json',
-      'https://raw.githubusercontent.com/KSJeshin/granthom-rasavan/main/layout/granthom_rasavan_v1.2.json',
     ];
     let json = null;
     for (const url of urls) {

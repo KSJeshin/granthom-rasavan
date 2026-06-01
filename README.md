@@ -2,9 +2,27 @@
 
 > *Type Malayalam as you learn it. Learn Malayalam as you type it.*
 
-A Malayalam keyboard layout where virama is built into every consonant key, all forms of a sound — base, root, chillu — live on one key, and the layout follows Malayalam's own phonological structure rather than typewriter mechanics or government grids.
+**Granthom Keyboard Layout** for malayalam.
+
+**Granthom Rasavan** is the project to develop a Malayalam keyboard layout where virama is built into every consonant key, all forms of a sound — base, root, chillu — live on one key, and the layout follows Malayalam's own phonological structure rather than typewriter mechanics or government grids. The keyboard layout is named as Granthom Keyboard Layout.
 
 Built on 112 million character occurrences from the SMC corpus: **55% home row coverage**, weighted effort score **1.93** vs ~2.20 for InScript, and **10% fewer keystrokes** through pre-composed virama and single-keypress chillu access. Methodology generalises to all Brahmic scripts.
+
+---
+
+## Live Simulator
+
+Try the layout in your browser — no installation needed:
+
+**[▶ Open Simulator](https://ksjeshin.github.io/granthom-rasavan/)**
+
+- In case the default layout is not automatically loaded, copy the json (granthom_rasavan) in layout/ and load it manually
+- For custom layout, drag keys from the palette onto the keyboard layout rows
+- Click any placed key to type that character
+- Enable **Physical keyboard** toggle to type using your actual keyboard
+- Click a placed key to edit its four layers (Normal / Shift / Symbl / Symbl+Shift)
+- **Caps Lock** switches to full English QWERTY and back
+- Save and load layouts as JSON to local system
 
 ---
 
@@ -103,21 +121,6 @@ AltGr + V  →  ർ   (ra-chillu, second most frequent)
 
 ---
 
-## Live Simulator
-
-Try the layout in your browser — no installation needed:
-
-**[▶ Open Simulator](https://ksjeshin.github.io/granthom-rasavan/)**
-
-- For custom layout, drag keys from the palette onto the keyboard rows to 
-- Click any placed key to type that character
-- Enable **Physical keyboard** toggle to type using your actual keyboard
-- Click a placed key to edit its four layers (Normal / Shift / Symbl / Symbl+Shift)
-- **Caps Lock** switches to full English QWERTY and back
-- Save and load layouts as JSON to local system
-
----
-
 ## Project Status
 
 | Component | Status |
@@ -129,7 +132,6 @@ Try the layout in your browser — no installation needed:
 | Windows MSKLC | Planned |
 | macOS / mobile | Planned |
 | User study | Planned |
-| arXiv paper | Draft ready |
 
 **Layout is not yet finalised.** Three ergonomic swaps are pending user testing confirmation. See [open issues](issues/open_issues.md).
 
@@ -145,13 +147,6 @@ granthom-rasavan/
 ├── CONTRIBUTING.md               ← how to contribute
 ├── CHANGELOG.md                  ← version history
 ├── docs/
-│   ├── arxiv/                    ← arXiv academic paper suite
-│   │   ├── INDEX.md              ← submission overview and checklist
-│   │   ├── paper_main.md         ← full academic paper
-│   │   ├── appendix_a_frequency_tables.md
-│   │   ├── appendix_b_key_assignment.md
-│   │   ├── appendix_c_ergonomic_model.md
-│   │   └── appendix_d_keystroke_analysis.md
 │   └── design/                   ← project design documentation
 │       ├── DESIGN.md             ← core design rationale
 │       ├── CORPUS.md             ← corpus methodology explained
@@ -170,6 +165,8 @@ granthom-rasavan/
 │       │   └── README.md         ← MSKLC / Keyman (planned)
 │       └── macos/
 │           └── README.md         ← Ukelele .keylayout (planned)
+├── scripts/
+│   └── generate.py               ← Keymap and score generator for the json layout definition
 ├── simulator/
 │   └── index.html                ← web simulator (GitHub Pages)
 └── issues/
@@ -190,7 +187,7 @@ Raw frequency data: [`data/character_frequencies.csv`](data/character_frequencie
 
 ## Generalisation to Other Brahmic Scripts
 
-The phonological grouping principle — Normal=base, Shift=virama form, AltGr=special boundary form — applies without architectural change to any Brahmic script. Tamil, Kannada, Devanagari, and Bengali are identified as immediate candidates. See [`docs/arxiv/paper_main.md §9`](docs/arxiv/paper_main.md) for the framework.
+The phonological grouping principle — Normal=base, Shift=virama form, AltGr=special boundary form — applies without architectural change to any Brahmic script. Tamil, Kannada, Devanagari, and Bengali are identified as immediate candidates. All contributions are welcome in these areas.
 
 ---
 

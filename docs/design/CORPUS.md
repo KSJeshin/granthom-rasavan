@@ -2,7 +2,6 @@
 
 This document explains how character frequencies were measured and how they were used to design the layout. Written for contributors and anyone who wants to understand or reproduce the analysis.
 
-For the academic treatment see [`docs/arxiv/paper_main.md §3`](../arxiv/paper_main.md).
 Raw frequency data: [`data/character_frequencies.csv`](../../data/character_frequencies.csv)
 
 ---

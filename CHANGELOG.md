@@ -23,7 +23,6 @@ Format: `[version] — date — summary`
 - Keystroke comparison vs InScript: ~10% reduction on 23,333-char benchmark
 
 ### Documentation
-- arXiv paper suite: 5 documents (paper + 4 appendices)
 - Supplementary data: character_frequencies.csv
 - GitHub repository initialised
 

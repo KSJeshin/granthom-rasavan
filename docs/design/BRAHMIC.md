@@ -1,8 +1,6 @@
 # Generalisation to Other Brahmic Scripts
 
-Granthom Rasavan's design methodology applies to all Brahmic scripts — not just Malayalam. This document explains how and gives starting points for each major Indian language.
-
-For the academic treatment see [`docs/arxiv/paper_main.md §9`](../arxiv/paper_main.md).
+Granthom Layout's design methodology applies to all Brahmic scripts — not just Malayalam. This document explains how and gives starting points for each major Indian language.
 
 ---
 
@@ -82,7 +80,7 @@ Same bilingual toggle model works for every Indian language.
 ### Kannada
 - Closest structural sibling to Malayalam — 49 consonants, near-identical mechanics
 - The virama is ್ (U+0CCD)
-- A Kannada Rasavan variant requires substituting Kannada Unicode ranges (U+0C80–U+0CFF) and Kannada corpus frequencies — minimal structural change
+- A Kannada Granthom Layout variant requires substituting Kannada Unicode ranges (U+0C80–U+0CFF) and Kannada corpus frequencies — minimal structural change
 - Reference corpus: Kannada Wikipedia + news
 
 ### Devanagari / Hindi
@@ -101,7 +99,7 @@ Same bilingual toggle model works for every Indian language.
 
 ## Contributing a Brahmic Script Variant
 
-If you want to create a Granthom Rasavan variant for another script:
+If you want to create a Granthom Layout variant for another script:
 
 1. Open an issue with the target language
 2. Share your corpus source
