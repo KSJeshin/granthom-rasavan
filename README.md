@@ -45,7 +45,7 @@ Granthom Rasavan starts from two foundations:
 
 ---
 
-## Layout at a Glance
+## Layout at a Glance (Place holder)
 
 ```
 ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
@@ -73,15 +73,15 @@ Granthom Rasavan starts from two foundations:
 ### Typing a syllable
 
 ```
-D          →  ക    (base consonant — Normal layer)
-Shift + D  →  ക്   (virama root — Shift layer)
-AltGr + D  →  ൿ   (chillu — AltGr layer)
+j          →  ക    (base consonant — Normal layer)
+Shift + j  →  ക്   (virama root — Shift layer)
+AltGr + j  →  ൿ   (chillu — AltGr layer)
 ```
 
 ### Typing a conjunct — no virama key needed
 
 ```
-Shift+D  Shift+L  J   →   ക്തി   (kti)
+Shift+j  Shift+l  f   →   ക്തി   (kti)
   ക്        ത്      ി
 ```
 
@@ -90,8 +90,8 @@ InScript equivalent: ക + virama-key + ത + virama-key + ി = 5 keystrokes vs
 ### Typing a chillu
 
 ```
-AltGr + F  →  ൻ   (na-chillu, most frequent)
-AltGr + V  →  ർ   (ra-chillu, second most frequent)
+AltGr + d  →  ൻ   (na-chillu, most frequent)
+AltGr + a  →  ർ   (ra-chillu, second most frequent)
 ```
 
 ---
@@ -178,8 +178,7 @@ granthom-rasavan/
 ## Corpus
 
 Character frequency analysis based on the **SMC Malayalam corpus**
-(https://github.com/smc/corpus) — approximately 1.7 billion word tokens,
-~112 million Malayalam character occurrences analysed.
+(https://github.com/smc/corpus) — ~112 million Malayalam character occurrences analysed.
 
 Raw frequency data: [`data/character_frequencies.csv`](data/character_frequencies.csv)
 
